@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="pico_sdk"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\Program Files\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\external\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\preload\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\preload\platforms\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\preload\platforms\pico\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\preload\toolchains\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\Platform\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_base\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_base\include\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_base\include\pico\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\boot_picoboot\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\boot_uf2\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_usb_reset_interface\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_bit_ops\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_binary_info\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_divider\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_sync\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_time\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_util\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_stdlib\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\boards\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_base\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_claim\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_adc\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_clocks\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_dma\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_divider\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_exception\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_flash\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_gpio\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_i2c\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_interp\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_irq\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_pio\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_pll\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_pwm\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_resets\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_rtc\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_spi\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_sync\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_timer\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_uart\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_vreg\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_watchdog\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_xosc\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_bootrom\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_platform\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\boot_stage2\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_bootsel_via_double_reset\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_multicore\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_unique_id\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_bit_ops\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_divider\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_double\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_int64_ops\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_float\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_mem_ops\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_malloc\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_printf\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_rand\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdio\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdio_semihosting\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdio_uart\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\cmsis\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\tinyusb\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdio_usb\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_i2c_slave\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_async_context\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_btstack\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_cyw43_driver\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_cyw43_driver\cybt_shared_bus\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_lwip\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_cyw43_arch\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_mbedtls\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdlib\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_cxx_options\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_standard_link\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_fix\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_fix\rp2040_usb_device_enumeration\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_runtime\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2040\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2040\hardware_regs\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2040\hardware_structs\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\tools\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\hw\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\hw\bsp\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\hw\bsp\rp2040\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\hw\bsp\rp2040\boards\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\hw\bsp\rp2040\boards\pico_sdk\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\docs\;CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk-tools\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bs2_default">
+				<Option output="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/bs2_default.elf" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DPICO_BOARD=&quot;pico&quot;"/>
+					<Add option="-DPICO_NO_HARDWARE=0"/>
+					<Add option="-DPICO_ON_DEVICE=1"/>
+					<Add option="-DPICO_BUILD=1"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/boot_stage2/asminclude"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2040/hardware_regs/include"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_base/include"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_base/include"/>
+					<Add directory="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/generated/pico_base"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/boards/include"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_platform/include"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/boot_stage2/include"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/include/c++/10.3.1"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/include/c++/10.3.1/arm-none-eabi"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/include/c++/10.3.1/backward"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/include"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/include-fixed"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 bs2_default"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bs2_default/fast">
+				<Option output="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/bs2_default.elf" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DPICO_BOARD=&quot;pico&quot;"/>
+					<Add option="-DPICO_NO_HARDWARE=0"/>
+					<Add option="-DPICO_ON_DEVICE=1"/>
+					<Add option="-DPICO_BUILD=1"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/boot_stage2/asminclude"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2040/hardware_regs/include"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_base/include"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_base/include"/>
+					<Add directory="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/generated/pico_base"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/boards/include"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_platform/include"/>
+					<Add directory="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/boot_stage2/include"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/include/c++/10.3.1"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/include/c++/10.3.1/arm-none-eabi"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/include/c++/10.3.1/backward"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/include"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/include-fixed"/>
+					<Add directory="c:\program files\raspberry pi\pico sdk v1.5.0\gcc-arm-none-eabi\bin\../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 bs2_default/fast"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bs2_default_bin">
+				<Option working_dir="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 bs2_default_bin"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bs2_default_padded_checksummed_asm">
+				<Option working_dir="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 bs2_default_padded_checksummed_asm"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/boot_stage2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tinyusb_pico_pio_usb_usb_tx_pio_h">
+				<Option working_dir="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb/Makefile&quot;  VERBOSE=1 tinyusb_pico_pio_usb_usb_tx_pio_h"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="tinyusb_pico_pio_usb_usb_rx_pio_h">
+				<Option working_dir="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb/Makefile&quot;  VERBOSE=1 tinyusb_pico_pio_usb_usb_rx_pio_h"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/tinyusb/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="cyw43_driver_picow_cyw43_bus_pio_spi_pio_h">
+				<Option working_dir="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/pico_cyw43_driver"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/pico_cyw43_driver/Makefile&quot;  VERBOSE=1 cyw43_driver_picow_cyw43_bus_pio_spi_pio_h"/>
+					<CompileFile command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/pico_cyw43_driver/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/pico_cyw43_driver/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="C:/PROGRA~1/JETBRA~1/CLION2~1.3/bin/mingw/bin/mingw32-make.exe -f &quot;C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/pico-sdk/src/rp2_common/pico_cyw43_driver/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/boot_stage2/compile_time_choice.S">
+			<Option target="bs2_default"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/pico_sdk_init.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/pico_sdk_version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/external/pico_sdk_import.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\external\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/cmake/pico_pre_load_platform.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/cmake/pico_pre_load_toolchain.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/cmake/pico_utils.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/cmake/preload/platforms/rp2040.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\preload\platforms\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/cmake/preload/platforms/pico/pico.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\preload\platforms\pico\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/cmake/preload/toolchains/find_compiler.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\preload\toolchains\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/cmake/preload/toolchains/pico_arm_gcc.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\preload\toolchains\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/cmake/preload/toolchains/set_flags.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\preload\toolchains\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/cmake/Platform/PICO.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\cmake\Platform\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/board_setup.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2040.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_base/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_base\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_base/generate_config_header.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_base\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_base/include/pico/version.h.in">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_base\include\pico\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/boot_picoboot/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\boot_picoboot\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/boot_uf2/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\boot_uf2\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_usb_reset_interface/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_usb_reset_interface\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_bit_ops/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_bit_ops\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_binary_info/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_binary_info\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_divider/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_divider\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_sync/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_sync\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_time/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_time\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_util/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_util\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/common/pico_stdlib/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\common\pico_stdlib\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/boards/generic_board.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\boards\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_base/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_base\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_claim/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_claim\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_adc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_adc\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_clocks/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_clocks\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_dma/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_dma\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_divider/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_divider\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_exception/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_exception\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_flash/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_flash\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_gpio/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_gpio\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_i2c/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_i2c\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_interp/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_interp\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_irq/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_irq\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_pio/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_pio\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_pll/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_pll\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_pwm/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_pwm\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_resets/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_resets\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_rtc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_rtc\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_spi/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_spi\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_sync/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_sync\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_timer/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_timer\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_uart/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_uart\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_vreg/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_vreg\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_watchdog/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_watchdog\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/hardware_xosc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\hardware_xosc\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_bootrom/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_bootrom\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_platform/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_platform\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/boot_stage2/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\boot_stage2\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_bootsel_via_double_reset/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_bootsel_via_double_reset\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_multicore/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_multicore\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_unique_id/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_unique_id\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_bit_ops/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_bit_ops\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_divider/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_divider\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_double/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_double\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_int64_ops/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_int64_ops\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_float/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_float\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_mem_ops/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_mem_ops\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_malloc/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_malloc\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_printf/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_printf\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_rand/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_rand\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_stdio/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdio\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_stdio_semihosting/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdio_semihosting\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_stdio_uart/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdio_uart\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/cmsis/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\cmsis\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/tinyusb/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\tinyusb\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_stdio_usb/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdio_usb\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_i2c_slave/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_i2c_slave\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_async_context/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_async_context\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_btstack/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_btstack\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_cyw43_driver/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_cyw43_driver\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_cyw43_driver/cybt_shared_bus/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_cyw43_driver\cybt_shared_bus\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_lwip/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_lwip\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_cyw43_arch/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_cyw43_arch\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_mbedtls/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_mbedtls\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_stdlib/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_stdlib\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_cxx_options/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_cxx_options\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_standard_link/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_standard_link\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_fix/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_fix\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_fix\rp2040_usb_device_enumeration\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2_common/pico_runtime/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2_common\pico_runtime\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2040/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2040\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2040/hardware_regs/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2040\hardware_regs\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/src/rp2040/hardware_structs/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\src\rp2040\hardware_structs\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/tools/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\tools\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/lib/tinyusb/hw/bsp/family_support.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\hw\bsp\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/lib/tinyusb/hw/bsp/rp2040/family.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\hw\bsp\rp2040\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/lib/tinyusb/hw/bsp/rp2040/pico_sdk_import.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\hw\bsp\rp2040\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/lib/tinyusb/hw/bsp/rp2040/boards/pico_sdk/board.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\lib\tinyusb\hw\bsp\rp2040\boards\pico_sdk\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk/docs/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk\docs\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk-tools/pico-sdk-tools-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk-tools\"/>
+		</Unit>
+		<Unit filename="C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/../../../../../../../Program Files/Raspberry Pi/Pico SDK v1.5.0/pico-sdk-tools/pico-sdk-tools-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\Program Files\Raspberry Pi\Pico SDK v1.5.0\pico-sdk-tools\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

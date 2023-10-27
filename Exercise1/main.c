@@ -19,9 +19,9 @@
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 
-void led_initalizer(const uint led);
-void button_initializer(const uint button);
-bool pressed(const uint gpio);
+void ledInitalizer(const uint led);
+void buttonInitializer(const uint button);
+bool buttonPressed(const uint gpio);
 
 int main(void) {
 
@@ -36,12 +36,12 @@ int main(void) {
     stdio_init_all();
 
     // Initialize LED pin
-    led_initalizer(led21);
+    ledInitalizer(led21);
 
     // Initialize LED pin
-    button_initializer(sw0);
-    button_initializer(sw1);
-    button_initializer(sw2);
+    buttonInitializer(sw0);
+    buttonInitializer(sw1);
+    buttonInitializer(sw2);
 
     // Loop forever
     while (true){
@@ -58,7 +58,7 @@ int main(void) {
         }
 
         if (!gpio_get(sw1)) {
-            bool changed = pressed(sw1);
+            bool changed = buttonPressed(sw1);
             if (true == changed) {
                 if (state == 0) {
                     state = 1;
@@ -70,18 +70,18 @@ int main(void) {
     }
 }
 
-void led_initalizer(const uint led) {
+void ledInitalizer(const uint led) {
     gpio_init(led);
     gpio_set_dir(led, GPIO_OUT);
 }
 
-void button_initializer(const uint button) {
+void buttonInitializer(const uint button) {
     gpio_init(button);
     gpio_set_dir(button, GPIO_IN);
     gpio_pull_up(button);
 }
 
-bool pressed(const uint gpio) {
+bool buttonPressed(const uint gpio) {
     int press = 0;
     int release = 0;
 
