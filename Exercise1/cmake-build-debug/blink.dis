@@ -43,9 +43,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  19 .debug_line   00016d42  00000000  00000000  00055098  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    0000727d  00000000  00000000  0006bdda  2**0
+ 20 .debug_str    00007281  00000000  00000000  0006bdda  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_frame  00002988  00000000  00000000  00073058  2**2
+ 21 .debug_frame  00002988  00000000  00000000  0007305c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/blink.elf:     file format elf32-littlearm
@@ -328,7 +328,7 @@ Disassembly of section .text:
 100002fc:	20000dac 	.word	0x20000dac
 10000300:	10006ea0 	.word	0x10006ea0
 
-10000304 <led_initalizer>:
+10000304 <ledInitalizer>:
 10000304:	b510      	push	{r4, lr}
 10000306:	0004      	movs	r4, r0
 10000308:	f000 f8ae 	bl	10000468 <gpio_init>
@@ -339,7 +339,7 @@ Disassembly of section .text:
 10000314:	6253      	str	r3, [r2, #36]	; 0x24
 10000316:	bd10      	pop	{r4, pc}
 
-10000318 <button_initializer>:
+10000318 <buttonInitializer>:
 10000318:	b510      	push	{r4, lr}
 1000031a:	0004      	movs	r4, r0
 1000031c:	f000 f8a4 	bl	10000468 <gpio_init>
@@ -354,35 +354,35 @@ Disassembly of section .text:
 10000330:	f000 f880 	bl	10000434 <gpio_set_pulls>
 10000334:	bd10      	pop	{r4, pc}
 
-10000336 <pressed>:
+10000336 <buttonPressed>:
 10000336:	b570      	push	{r4, r5, r6, lr}
 10000338:	0006      	movs	r6, r0
 1000033a:	2500      	movs	r5, #0
 1000033c:	2400      	movs	r4, #0
-1000033e:	e004      	b.n	1000034a <pressed+0x14>
+1000033e:	e004      	b.n	1000034a <buttonPressed+0x14>
 10000340:	3501      	adds	r5, #1
 10000342:	2400      	movs	r4, #0
 10000344:	200a      	movs	r0, #10
 10000346:	f001 fa03 	bl	10001750 <sleep_ms>
 1000034a:	2c01      	cmp	r4, #1
-1000034c:	dc0a      	bgt.n	10000364 <pressed+0x2e>
+1000034c:	dc0a      	bgt.n	10000364 <buttonPressed+0x2e>
 1000034e:	2d01      	cmp	r5, #1
-10000350:	dc08      	bgt.n	10000364 <pressed+0x2e>
+10000350:	dc08      	bgt.n	10000364 <buttonPressed+0x2e>
 10000352:	23d0      	movs	r3, #208	; 0xd0
 10000354:	061b      	lsls	r3, r3, #24
 10000356:	685b      	ldr	r3, [r3, #4]
 10000358:	40f3      	lsrs	r3, r6
 1000035a:	07db      	lsls	r3, r3, #31
-1000035c:	d4f0      	bmi.n	10000340 <pressed+0xa>
+1000035c:	d4f0      	bmi.n	10000340 <buttonPressed+0xa>
 1000035e:	3401      	adds	r4, #1
 10000360:	2500      	movs	r5, #0
-10000362:	e7ef      	b.n	10000344 <pressed+0xe>
+10000362:	e7ef      	b.n	10000344 <buttonPressed+0xe>
 10000364:	42ac      	cmp	r4, r5
-10000366:	dd01      	ble.n	1000036c <pressed+0x36>
+10000366:	dd01      	ble.n	1000036c <buttonPressed+0x36>
 10000368:	2001      	movs	r0, #1
 1000036a:	bd70      	pop	{r4, r5, r6, pc}
 1000036c:	2000      	movs	r0, #0
-1000036e:	e7fc      	b.n	1000036a <pressed+0x34>
+1000036e:	e7fc      	b.n	1000036a <buttonPressed+0x34>
 
 10000370 <main>:
 10000370:	b5f0      	push	{r4, r5, r6, r7, lr}
@@ -390,13 +390,13 @@ Disassembly of section .text:
 10000374:	b500      	push	{lr}
 10000376:	f004 f9ed 	bl	10004754 <stdio_init_all>
 1000037a:	2015      	movs	r0, #21
-1000037c:	f7ff ffc2 	bl	10000304 <led_initalizer>
+1000037c:	f7ff ffc2 	bl	10000304 <ledInitalizer>
 10000380:	2009      	movs	r0, #9
-10000382:	f7ff ffc9 	bl	10000318 <button_initializer>
+10000382:	f7ff ffc9 	bl	10000318 <buttonInitializer>
 10000386:	2008      	movs	r0, #8
-10000388:	f7ff ffc6 	bl	10000318 <button_initializer>
+10000388:	f7ff ffc6 	bl	10000318 <buttonInitializer>
 1000038c:	2007      	movs	r0, #7
-1000038e:	f7ff ffc3 	bl	10000318 <button_initializer>
+1000038e:	f7ff ffc3 	bl	10000318 <buttonInitializer>
 10000392:	2400      	movs	r4, #0
 10000394:	2500      	movs	r5, #0
 10000396:	2c01      	cmp	r4, #1
@@ -419,7 +419,7 @@ Disassembly of section .text:
 100003ba:	4213      	tst	r3, r2
 100003bc:	d1eb      	bne.n	10000396 <main+0x26>
 100003be:	2008      	movs	r0, #8
-100003c0:	f7ff ffb9 	bl	10000336 <pressed>
+100003c0:	f7ff ffb9 	bl	10000336 <buttonPressed>
 100003c4:	2800      	cmp	r0, #0
 100003c6:	d0e6      	beq.n	10000396 <main+0x26>
 100003c8:	2c00      	cmp	r4, #0
