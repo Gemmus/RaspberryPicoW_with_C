@@ -35,17 +35,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_abbrev 000068ac  00000000  00000000  00030914  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_loc    000184e6  00000000  00000000  000371c0  2**0
+ 16 .debug_loc    000184f4  00000000  00000000  000371c0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_aranges 00001480  00000000  00000000  0004f6a8  2**3
+ 17 .debug_aranges 00001480  00000000  00000000  0004f6b8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_ranges 00004968  00000000  00000000  00050b28  2**3
+ 18 .debug_ranges 00004968  00000000  00000000  00050b38  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_line   00016dad  00000000  00000000  00055490  2**0
+ 19 .debug_line   00016dad  00000000  00000000  000554a0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    000072c1  00000000  00000000  0006c23d  2**0
+ 20 .debug_str    000072da  00000000  00000000  0006c24d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_frame  000029a8  00000000  00000000  00073500  2**2
+ 21 .debug_frame  000029a8  00000000  00000000  00073528  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 C:/Users/Gemma/Desktop/2023_autumn/RaspberryPico/RaspberryPicoW_with_C/Exercise1/cmake-build-debug/blink.elf:     file format elf32-littlearm
@@ -328,7 +328,7 @@ Disassembly of section .text:
 100002fc:	20000dac 	.word	0x20000dac
 10000300:	10006e30 	.word	0x10006e30
 
-10000304 <repeating_timer_callback>:
+10000304 <repeatingTimerCallback>:
 10000304:	23d0      	movs	r3, #208	; 0xd0
 10000306:	061b      	lsls	r3, r3, #24
 10000308:	685a      	ldr	r2, [r3, #4]
@@ -336,27 +336,27 @@ Disassembly of section .text:
 1000030c:	2301      	movs	r3, #1
 1000030e:	0018      	movs	r0, r3
 10000310:	4010      	ands	r0, r2
-10000312:	4a0c      	ldr	r2, [pc, #48]	; (10000344 <repeating_timer_callback+0x40>)
+10000312:	4a0c      	ldr	r2, [pc, #48]	; (10000344 <repeatingTimerCallback+0x40>)
 10000314:	6812      	ldr	r2, [r2, #0]
 10000316:	4282      	cmp	r2, r0
-10000318:	d00f      	beq.n	1000033a <repeating_timer_callback+0x36>
-1000031a:	490b      	ldr	r1, [pc, #44]	; (10000348 <repeating_timer_callback+0x44>)
+10000318:	d00f      	beq.n	1000033a <repeatingTimerCallback+0x36>
+1000031a:	490b      	ldr	r1, [pc, #44]	; (10000348 <repeatingTimerCallback+0x44>)
 1000031c:	680a      	ldr	r2, [r1, #0]
 1000031e:	3201      	adds	r2, #1
 10000320:	600a      	str	r2, [r1, #0]
 10000322:	2a04      	cmp	r2, #4
-10000324:	d90c      	bls.n	10000340 <repeating_timer_callback+0x3c>
-10000326:	4a07      	ldr	r2, [pc, #28]	; (10000344 <repeating_timer_callback+0x40>)
+10000324:	d90c      	bls.n	10000340 <repeatingTimerCallback+0x3c>
+10000326:	4a07      	ldr	r2, [pc, #28]	; (10000344 <repeatingTimerCallback+0x40>)
 10000328:	6010      	str	r0, [r2, #0]
 1000032a:	2200      	movs	r2, #0
 1000032c:	600a      	str	r2, [r1, #0]
 1000032e:	2800      	cmp	r0, #0
-10000330:	d006      	beq.n	10000340 <repeating_timer_callback+0x3c>
-10000332:	4b06      	ldr	r3, [pc, #24]	; (1000034c <repeating_timer_callback+0x48>)
+10000330:	d006      	beq.n	10000340 <repeatingTimerCallback+0x3c>
+10000332:	4b06      	ldr	r3, [pc, #24]	; (1000034c <repeatingTimerCallback+0x48>)
 10000334:	3201      	adds	r2, #1
 10000336:	701a      	strb	r2, [r3, #0]
-10000338:	e002      	b.n	10000340 <repeating_timer_callback+0x3c>
-1000033a:	4b03      	ldr	r3, [pc, #12]	; (10000348 <repeating_timer_callback+0x44>)
+10000338:	e002      	b.n	10000340 <repeatingTimerCallback+0x3c>
+1000033a:	4b03      	ldr	r3, [pc, #12]	; (10000348 <repeatingTimerCallback+0x44>)
 1000033c:	2200      	movs	r2, #0
 1000033e:	601a      	str	r2, [r3, #0]
 10000340:	2001      	movs	r0, #1

@@ -33,17 +33,14 @@ void buttonInitializer();
 void pwnInitializer();
 void allLedOn();
 void allLedOff();
-bool repeating_timer_callback(struct repeating_timer *t);
-bool buttonPressed(const uint gpio);
+bool repeatingTimerCallback(struct repeating_timer *t);
 
-uint buttonstate = 0;
 volatile bool buttonreleased = false;
 
 int main(void) {
 
     static bool ledstate = false;
-//    uint state = 0; // for SW1 ON-OFF --> ON = 1; OFF = 0;
-    struct repeating_timer timer;
+
     // Initialize input output
     stdio_init_all();
 
@@ -53,7 +50,9 @@ int main(void) {
     // Initialize LED pin
     buttonInitializer();
 
-    add_repeating_timer_ms(10, repeating_timer_callback, NULL, &timer);
+    struct repeating_timer timer;
+    add_repeating_timer_ms(10, repeatingTimerCallback, NULL, &timer);
+
     // Loop forever
     while (true){
 
@@ -70,23 +69,6 @@ int main(void) {
         } else {
             allLedOff();
         }
-#if 0
-        if (!gpio_get(SW1)) {
-            uint pressed = 1;
-            while(pressed == 1) {
-                bool changed = buttonPressed(SW1);
-                if (true == changed) {
-                    if (state == 0) {
-                        state = 1;
-                        pressed = 0;
-                    } else {
-                        state = 0;
-                        pressed = 0;
-                    }
-                }
-            }
-        }
-#endif
     }
 }
 
@@ -129,51 +111,23 @@ void allLedOff() {
     //gpio_put(D1_LED, false);
 }
 
-bool repeating_timer_callback(struct repeating_timer *t) {
+bool repeatingTimerCallback(struct repeating_timer *t) {
 
-    uint new_state;
-    static uint filtercounter = 0;
+    static uint button_state = 0, filter_counter = 0;
+    uint new_state = 1;
 
     new_state = gpio_get(SW1);
-    if (buttonstate != new_state)
-    {
-       if (++filtercounter >= BUTTON_FILTERING)
-       {
-           buttonstate = new_state;
-           filtercounter = 0;
-           if (new_state == RELEASED)
-           {
+    if (button_state != new_state) {
+       if (++filter_counter >= BUTTON_FILTERING) {
+           button_state = new_state;
+           filter_counter = 0;
+           if (new_state == RELEASED) {
                buttonreleased = true;
            }
        }
-    }
-    else
-    {
-        filtercounter = 0;
+    } else {
+        filter_counter = 0;
     }
 
     return true;
 }
-#if 0
-bool buttonPressed(const uint gpio) {
-    int press = 0;
-    int release = 0;
-
-    while(press < 3 && release < 3) {
-        if(!gpio_get(gpio)) {
-            press++;
-            release = 0;
-        } else {
-            release++;
-            press = 0;
-        }
-        sleep_ms(10);
-    }
-
-    if(press > release) {
-        return true;
-    } else {
-        return false;
-    }
-}
-#endif
