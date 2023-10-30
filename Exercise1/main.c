@@ -28,6 +28,8 @@
 #define BUTTON_FILTERING 5
 #define RELEASED 1
 #define PWM_FREQ 1000
+#define LEVEL 5
+#define DIVIDER 125
 
 void ledInitalizer();
 void buttonInitializer();
@@ -37,7 +39,7 @@ void allLedOff();
 bool repeatingTimerCallback(struct repeating_timer *t);
 
 volatile bool buttonreleased = false;
-volatile int brightness = 125; // 0-255: 0: none, 255: brightest
+volatile int brightness = 130; // 0-255: 0: none, 255: brightest
 
 int main(void) {
 
@@ -99,36 +101,47 @@ void buttonInitializer() {
 }
 
 void pwmInitializer() {
-    // D1:             (Slice: 2A)
+
+    pwm_config config = pwm_get_default_config();
+
+    // D1:             (2A)
     uint d1_slice = pwm_gpio_to_slice_num(D1_LED);
-    //uint d1_chanel = pwm_gpio_to_channel(D1_LED);
+    uint d1_chanel = pwm_gpio_to_channel(D1_LED);
+    pwm_set_enabled(d1_slice, false);
+    pwm_config_set_clkdiv_int(&config, DIVIDER);
+    pwm_config_set_wrap(&config, PWM_FREQ);
+    pwm_init(d1_slice, &config, false);
+    pwm_set_chan_level(d1_slice, d1_chanel, LEVEL);
     gpio_set_function(D1_LED, GPIO_FUNC_PWM);
     pwm_set_enabled (d1_slice, true);
-    pwm_set_wrap (d1_slice, PWM_FREQ);
-    pwm_set_phase_correct (d1_slice, true);
 
-    // D2:             (Slice: 2B)
+    // D2:             (2B)
     uint d2_slice = pwm_gpio_to_slice_num(D2_LED);
-    //uint d2_chanel = pwm_gpio_to_channel(D2_LED);
+    uint d2_chanel = pwm_gpio_to_channel(D2_LED);
+    pwm_set_enabled(d2_slice, false);
+    pwm_config_set_clkdiv_int(&config, DIVIDER);
+    pwm_config_set_wrap(&config, PWM_FREQ);
+    pwm_init(d2_slice, &config, false);
+    pwm_set_chan_level(d2_slice, d2_chanel, LEVEL);
     gpio_set_function(D2_LED, GPIO_FUNC_PWM);
     pwm_set_enabled (d2_slice, true);
-    pwm_set_wrap (d2_slice, PWM_FREQ);
-    pwm_set_phase_correct (d2_slice, true);
 
-    //D3:              (Slice: 3A)
+    //D3:              (3A)
     uint d3_slice = pwm_gpio_to_slice_num(D3_LED);
-    //uint d3_chanel = pwm_gpio_to_channel(D3_LED);
+    uint d3_chanel = pwm_gpio_to_channel(D3_LED);
+    pwm_set_enabled(d3_slice, false);
+    pwm_config_set_clkdiv_int(&config, DIVIDER);
+    pwm_config_set_wrap(&config, PWM_FREQ);
+    pwm_init(d3_slice, &config, false);
+    pwm_set_chan_level(d3_slice, d3_chanel, LEVEL);
     gpio_set_function(D3_LED, GPIO_FUNC_PWM);
     pwm_set_enabled (d3_slice, true);
-    pwm_set_wrap (d3_slice, PWM_FREQ);
-    pwm_set_phase_correct (d3_slice, true);
-
 }
 
 void allLedOn() {
-    pwm_set_gpio_level(D1_LED, brightness);
+    pwm_set_gpio_level(D1_LED, 255);
     pwm_set_gpio_level(D2_LED, brightness);
-    pwm_set_gpio_level(D3_LED, brightness);
+    pwm_set_gpio_level(D3_LED, 15);
 }
 
 void allLedOff() {
