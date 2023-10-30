@@ -37,7 +37,7 @@ void allLedOff();
 bool repeatingTimerCallback(struct repeating_timer *t);
 
 volatile bool buttonreleased = false;
-volatile int brightness = 128; // 0-255: 0: none, 255: brightest
+volatile int brightness = 125; // 0-255: 0: none, 255: brightest
 
 int main(void) {
 
@@ -106,7 +106,6 @@ void pwmInitializer() {
     pwm_set_enabled (d1_slice, true);
     pwm_set_wrap (d1_slice, PWM_FREQ);
     pwm_set_phase_correct (d1_slice, true);
-    pwm_set_gpio_level(D1_LED, 255);
 
     // D2:             (Slice: 2B)
     uint d2_slice = pwm_gpio_to_slice_num(D2_LED);
@@ -115,7 +114,6 @@ void pwmInitializer() {
     pwm_set_enabled (d2_slice, true);
     pwm_set_wrap (d2_slice, PWM_FREQ);
     pwm_set_phase_correct (d2_slice, true);
-    pwm_set_gpio_level(D2_LED, brightness);
 
     //D3:              (Slice: 3A)
     uint d3_slice = pwm_gpio_to_slice_num(D3_LED);
@@ -124,20 +122,19 @@ void pwmInitializer() {
     pwm_set_enabled (d3_slice, true);
     pwm_set_wrap (d3_slice, PWM_FREQ);
     pwm_set_phase_correct (d3_slice, true);
-    pwm_set_gpio_level(D3_LED, 15);
 
 }
 
 void allLedOn() {
-    gpio_put(D3_LED, true);
-    gpio_put(D2_LED, false);
-    gpio_put(D1_LED, true);
+    pwm_set_gpio_level(D1_LED, brightness);
+    pwm_set_gpio_level(D2_LED, brightness);
+    pwm_set_gpio_level(D3_LED, brightness);
 }
 
 void allLedOff() {
-    gpio_put(D3_LED, false);
-    gpio_put(D2_LED, true);
-    gpio_put(D1_LED, false);
+    pwm_set_gpio_level(D1_LED, 0);
+    pwm_set_gpio_level(D2_LED, 0);
+    pwm_set_gpio_level(D3_LED, 0);
 }
 
 bool repeatingTimerCallback(struct repeating_timer *t) {
