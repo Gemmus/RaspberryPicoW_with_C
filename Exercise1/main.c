@@ -27,15 +27,17 @@
 #define SW2 7 // decreases brightness gradually if held; only in ON state
 #define BUTTON_FILTERING 5
 #define RELEASED 1
+#define PWM_FREQ 1000
 
 void ledInitalizer();
 void buttonInitializer();
-void pwnInitializer();
+void pwmInitializer();
 void allLedOn();
 void allLedOff();
 bool repeatingTimerCallback(struct repeating_timer *t);
 
 volatile bool buttonreleased = false;
+volatile int brightness = 128; // 0-255: 0: none, 255: brightest
 
 int main(void) {
 
@@ -49,6 +51,9 @@ int main(void) {
 
     // Initialize LED pin
     buttonInitializer();
+
+    // Initialize PWM
+    pwmInitializer();
 
     struct repeating_timer timer;
     add_repeating_timer_ms(10, repeatingTimerCallback, NULL, &timer);
@@ -93,22 +98,46 @@ void buttonInitializer() {
     gpio_pull_up(SW2);
 }
 
-void pwnInitializer() {
-    //gpio_set_function(D3_LED, GPIO_FUNC_PWM); // Slice: 2A
-    gpio_set_function(D2_LED, GPIO_FUNC_PWM); // Slice: 2B
-    // gpio_set_function(D1_LED, GPIO_FUNC_PWM); // Slice: 3A
+void pwmInitializer() {
+    // D1:             (Slice: 2A)
+    uint d1_slice = pwm_gpio_to_slice_num(D1_LED);
+    //uint d1_chanel = pwm_gpio_to_channel(D1_LED);
+    gpio_set_function(D1_LED, GPIO_FUNC_PWM);
+    pwm_set_enabled (d1_slice, true);
+    pwm_set_wrap (d1_slice, PWM_FREQ);
+    pwm_set_phase_correct (d1_slice, true);
+    pwm_set_gpio_level(D1_LED, 255);
+
+    // D2:             (Slice: 2B)
+    uint d2_slice = pwm_gpio_to_slice_num(D2_LED);
+    //uint d2_chanel = pwm_gpio_to_channel(D2_LED);
+    gpio_set_function(D2_LED, GPIO_FUNC_PWM);
+    pwm_set_enabled (d2_slice, true);
+    pwm_set_wrap (d2_slice, PWM_FREQ);
+    pwm_set_phase_correct (d2_slice, true);
+    pwm_set_gpio_level(D2_LED, brightness);
+
+    //D3:              (Slice: 3A)
+    uint d3_slice = pwm_gpio_to_slice_num(D3_LED);
+    //uint d3_chanel = pwm_gpio_to_channel(D3_LED);
+    gpio_set_function(D3_LED, GPIO_FUNC_PWM);
+    pwm_set_enabled (d3_slice, true);
+    pwm_set_wrap (d3_slice, PWM_FREQ);
+    pwm_set_phase_correct (d3_slice, true);
+    pwm_set_gpio_level(D3_LED, 15);
+
 }
 
 void allLedOn() {
-    //gpio_put(D3_LED, true);
+    gpio_put(D3_LED, true);
     gpio_put(D2_LED, false);
-    //gpio_put(D1_LED, true);
+    gpio_put(D1_LED, true);
 }
 
 void allLedOff() {
-    //gpio_put(D3_LED, false);
+    gpio_put(D3_LED, false);
     gpio_put(D2_LED, true);
-    //gpio_put(D1_LED, false);
+    gpio_put(D1_LED, false);
 }
 
 bool repeatingTimerCallback(struct repeating_timer *t) {
@@ -118,13 +147,13 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
 
     new_state = gpio_get(SW1);
     if (button_state != new_state) {
-       if (++filter_counter >= BUTTON_FILTERING) {
-           button_state = new_state;
-           filter_counter = 0;
-           if (new_state == RELEASED) {
-               buttonreleased = true;
-           }
-       }
+        if (++filter_counter >= BUTTON_FILTERING) {
+            button_state = new_state;
+            filter_counter = 0;
+            if (new_state == RELEASED) {
+                buttonreleased = true;
+            }
+        }
     } else {
         filter_counter = 0;
     }
