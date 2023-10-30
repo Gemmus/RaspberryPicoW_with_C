@@ -39,7 +39,7 @@ void allLedOff();
 bool repeatingTimerCallback(struct repeating_timer *t);
 
 volatile bool buttonreleased = false;
-volatile int brightness = 128; // 0-255: 0: none, 255: brightest
+volatile int brightness = 500;
 volatile bool ledstate = false;
 
 int main(void) {
@@ -65,7 +65,12 @@ int main(void) {
         if (buttonreleased) {
             buttonreleased = false;
             if(true == ledstate) {
-                ledstate = false;
+                if (brightness != 0) {
+                    ledstate = false;
+                } else {
+                    ledstate = true;
+                    brightness = 500;
+                }
             } else {
                 ledstate = true;
             }
@@ -76,7 +81,7 @@ int main(void) {
         } else {
             allLedOff();
             if (0 == brightness) {
-                brightness = 128;
+                brightness = 500;
             }
         }
     }
