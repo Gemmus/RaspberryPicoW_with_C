@@ -27,8 +27,8 @@
 #define SW2 7 // decreases brightness gradually if held; only in ON state
 #define BUTTON_FILTERING 5
 #define RELEASED 1
-#define PWM_FREQ 1000
-#define LEVEL 5
+#define PWM_FREQ 999
+#define LEVEL 6
 #define DIVIDER 125
 
 void ledInitalizer();
@@ -39,11 +39,10 @@ void allLedOff();
 bool repeatingTimerCallback(struct repeating_timer *t);
 
 volatile bool buttonreleased = false;
-volatile int brightness = 130; // 0-255: 0: none, 255: brightest
+volatile int brightness = 128; // 0-255: 0: none, 255: brightest
+volatile bool ledstate = false;
 
 int main(void) {
-
-    static bool ledstate = false;
 
     // Initialize input output
     stdio_init_all();
@@ -63,18 +62,22 @@ int main(void) {
     // Loop forever
     while (true){
 
-        if (buttonreleased)
-        {
+        if (buttonreleased) {
             buttonreleased = false;
-            if(ledstate)
+            if(true == ledstate) {
                 ledstate = false;
-            else
+            } else {
                 ledstate = true;
+            }
         }
-        if (ledstate) {
+
+        if (true == ledstate) {
             allLedOn();
         } else {
             allLedOff();
+            if (0 == brightness) {
+                brightness = 128;
+            }
         }
     }
 }
@@ -113,7 +116,7 @@ void pwmInitializer() {
     pwm_init(d1_slice, &config, false);
     pwm_set_chan_level(d1_slice, d1_chanel, LEVEL);
     gpio_set_function(D1_LED, GPIO_FUNC_PWM);
-    pwm_set_enabled (d1_slice, true);
+    pwm_set_enabled(d1_slice, true);
 
     // D2:             (2B)
     uint d2_slice = pwm_gpio_to_slice_num(D2_LED);
@@ -124,7 +127,7 @@ void pwmInitializer() {
     pwm_init(d2_slice, &config, false);
     pwm_set_chan_level(d2_slice, d2_chanel, LEVEL);
     gpio_set_function(D2_LED, GPIO_FUNC_PWM);
-    pwm_set_enabled (d2_slice, true);
+    pwm_set_enabled(d2_slice, true);
 
     //D3:              (3A)
     uint d3_slice = pwm_gpio_to_slice_num(D3_LED);
@@ -135,13 +138,13 @@ void pwmInitializer() {
     pwm_init(d3_slice, &config, false);
     pwm_set_chan_level(d3_slice, d3_chanel, LEVEL);
     gpio_set_function(D3_LED, GPIO_FUNC_PWM);
-    pwm_set_enabled (d3_slice, true);
+    pwm_set_enabled(d3_slice, true);
 }
 
 void allLedOn() {
-    pwm_set_gpio_level(D1_LED, 255);
+    pwm_set_gpio_level(D1_LED, brightness);
     pwm_set_gpio_level(D2_LED, brightness);
-    pwm_set_gpio_level(D3_LED, 15);
+    pwm_set_gpio_level(D3_LED, brightness);
 }
 
 void allLedOff() {
@@ -152,6 +155,7 @@ void allLedOff() {
 
 bool repeatingTimerCallback(struct repeating_timer *t) {
 
+    // For SW1
     static uint button_state = 0, filter_counter = 0;
     uint new_state = 1;
 
@@ -166,6 +170,23 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
         }
     } else {
         filter_counter = 0;
+    }
+
+    if (true == ledstate) {
+        // For SW0
+        if (!gpio_get(SW0)) { // increase
+            if(brightness < 255) {
+                printf("Brightness: %d\n", brightness);
+                brightness += 1;
+            }
+        }
+        // For SW2
+        if (!gpio_get(SW2)) { // decrease
+            if(brightness > 0) {
+                printf("Brightness to: %d\n", brightness);
+                brightness -= 1;
+            }
+        }
     }
 
     return true;
