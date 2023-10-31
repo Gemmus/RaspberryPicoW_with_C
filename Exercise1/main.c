@@ -1,9 +1,8 @@
 /*
- * Follow instructions in clion_setup.pdf to create CMake project.
  * Implement a program for switching LEDs on/off and dimming them. The program should work as follows:
  * • SW1, the middle button is the on/off button. When button is pressed the state of LEDs is toggled.
- * Program must require the button to be released before the LEDs toggle again. Holding the button
- * may not cause LEDs to toggle multiple times.
+ *   Program must require the button to be released before the LEDs toggle again. Holding the button
+ *   may not cause LEDs to toggle multiple times.
  * • SW0 and SW2 are used to control dimming when LEDs are in ON state. SW0 increases brightness
  *   and SW2 decreases brightness. Holding a button makes the brightness to increase/decrease
  *   smoothly. If LEDs are in OFF state the buttons have no effect.
@@ -37,11 +36,11 @@
 #define MAX_BRIGHTNESS 1000
 #define BRIGHTNESS_STEP 2
 
-void ledInitalizer();
-void buttonInitializer();
-void pwmInitializer();
-void allLedOn();
-void allLedOff();
+void ledsInit();
+void buttonsInit();
+void pwmInit();
+void allLedsOn();
+void allLedsOff();
 bool repeatingTimerCallback(struct repeating_timer *t);
 
 volatile bool buttonEvent = false;
@@ -52,11 +51,11 @@ int main(void) {
 
     stdio_init_all();
 
-    ledInitalizer();
+    ledsInit();
 
-    buttonInitializer();
+    buttonsInit();
 
-    pwmInitializer();
+    pwmInit();
 
     struct repeating_timer timer;
     add_repeating_timer_ms(BUTTON_PERIOD, repeatingTimerCallback, NULL, &timer);
@@ -78,14 +77,14 @@ int main(void) {
         }
 
         if (true == ledState) {
-            allLedOn();
+            allLedsOn();
         } else {
-            allLedOff();
+            allLedsOff();
         }
     }
 }
 
-void ledInitalizer() {
+void ledsInit() {
     gpio_init(D3);
     gpio_set_dir(D3, GPIO_OUT);
     gpio_init(D2);
@@ -94,7 +93,7 @@ void ledInitalizer() {
     gpio_set_dir(D1, GPIO_OUT);
 }
 
-void buttonInitializer() {
+void buttonsInit() {
     gpio_init(SW_0);
     gpio_set_dir(SW_0, GPIO_IN);
     gpio_pull_up(SW_0);
@@ -106,7 +105,7 @@ void buttonInitializer() {
     gpio_pull_up(SW_2);
 }
 
-void pwmInitializer() {
+void pwmInit() {
 
     pwm_config config = pwm_get_default_config();
 
@@ -144,13 +143,13 @@ void pwmInitializer() {
     pwm_set_enabled(d3_slice, true);
 }
 
-void allLedOn() {
+void allLedsOn() {
     pwm_set_gpio_level(D1, brightness);
     pwm_set_gpio_level(D2, brightness);
     pwm_set_gpio_level(D3, brightness);
 }
 
-void allLedOff() {
+void allLedsOff() {
     pwm_set_gpio_level(D1, MIN_BRIGHTNESS);
     pwm_set_gpio_level(D2, MIN_BRIGHTNESS);
     pwm_set_gpio_level(D3, MIN_BRIGHTNESS);
@@ -158,7 +157,7 @@ void allLedOff() {
 
 bool repeatingTimerCallback(struct repeating_timer *t) {
 
-    // For SW1
+    // For SW_1: ON-OFF
     static uint button_state = 0, filter_counter = 0;
     uint new_state = 1;
 
@@ -176,8 +175,8 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
     }
 
     if (true == ledState) {
-        // For SW0
-        if (!gpio_get(SW_0)) { // increase
+        // For SW_0: increase
+        if (!gpio_get(SW_0)) {
             if (MIN_BRIGHTNESS <= brightness && brightness <= MAX_BRIGHTNESS) {
                 brightness += BRIGHTNESS_STEP;
                 if (brightness > MAX_BRIGHTNESS) {
@@ -185,8 +184,8 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
                 }
             }
         }
-        // For SW2
-        if (!gpio_get(SW_2)) { // decrease
+        // For SW_2: decrease
+        if (!gpio_get(SW_2)) {
             if (MIN_BRIGHTNESS <= brightness && brightness <= MAX_BRIGHTNESS) {
                 brightness -= BRIGHTNESS_STEP;
                 if (brightness < MIN_BRIGHTNESS) {
