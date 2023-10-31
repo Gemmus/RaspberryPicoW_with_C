@@ -19,17 +19,20 @@
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 
-#define D1_LED 22
-#define D2_LED 21
-#define D3_LED 20
-#define SW0 9 // icreases brightness gradually if held; only in ON state
-#define SW1 8 // ON - OFF
-#define SW2 7 // decreases brightness gradually if held; only in ON state
-#define BUTTON_FILTERING 5
+#define D1 22
+#define D2 21
+#define D3 20
+#define SW_0 9 // icreases brightness gradually if held; only in ON state
+#define SW_1 8 // ON - OFF
+#define SW_2 7 // decreases brightness gradually if held; only in ON state
+#define BUTTON_FILTER 5
 #define RELEASED 1
 #define PWM_FREQ 999
 #define LEVEL 6
 #define DIVIDER 125
+#define MIN_BRIGHTNESS 0
+#define MAX_BRIGHTNESS 1000
+#define BRIGHTNESS_STEP 5
 
 void ledInitalizer();
 void buttonInitializer();
@@ -38,45 +41,40 @@ void allLedOn();
 void allLedOff();
 bool repeatingTimerCallback(struct repeating_timer *t);
 
-volatile bool buttonreleased = false;
-volatile int brightness = 500;
-volatile bool ledstate = false;
+volatile bool buttonReleased = false;
+volatile int brightness = MAX_BRIGHTNESS / 2;
+volatile bool ledState = false;
 
 int main(void) {
 
-    // Initialize input output
     stdio_init_all();
 
-    // Initialize LED pin
     ledInitalizer();
 
-    // Initialize LED pin
     buttonInitializer();
 
-    // Initialize PWM
     pwmInitializer();
 
     struct repeating_timer timer;
     add_repeating_timer_ms(10, repeatingTimerCallback, NULL, &timer);
 
-    // Loop forever
     while (true){
 
-        if (buttonreleased) {
-            buttonreleased = false;
-            if(true == ledstate) {
-                if (brightness != 0) {
-                    ledstate = false;
+        if (buttonReleased) {
+            buttonReleased = false;
+            if(true == ledState) {
+                if (brightness != MIN_BRIGHTNESS) {
+                    ledState = false;
                 } else {
-                    ledstate = true;
-                    brightness = 500;
+                    ledState = true;
+                    brightness = MAX_BRIGHTNESS / 2;
                 }
             } else {
-                ledstate = true;
+                ledState = true;
             }
         }
 
-        if (true == ledstate) {
+        if (true == ledState) {
             allLedOn();
         } else {
             allLedOff();
@@ -85,24 +83,24 @@ int main(void) {
 }
 
 void ledInitalizer() {
-    gpio_init(D3_LED);
-    gpio_set_dir(D3_LED, GPIO_OUT);
-    gpio_init(D2_LED);
-    gpio_set_dir(D2_LED, GPIO_OUT);
-    gpio_init(D1_LED);
-    gpio_set_dir(D1_LED, GPIO_OUT);
+    gpio_init(D3);
+    gpio_set_dir(D3, GPIO_OUT);
+    gpio_init(D2);
+    gpio_set_dir(D2, GPIO_OUT);
+    gpio_init(D1);
+    gpio_set_dir(D1, GPIO_OUT);
 }
 
 void buttonInitializer() {
-    gpio_init(SW0);
-    gpio_set_dir(SW0, GPIO_IN);
-    gpio_pull_up(SW0);
-    gpio_init(SW1);
-    gpio_set_dir(SW1, GPIO_IN);
-    gpio_pull_up(SW1);
-    gpio_init(SW2);
-    gpio_set_dir(SW2, GPIO_IN);
-    gpio_pull_up(SW2);
+    gpio_init(SW_0);
+    gpio_set_dir(SW_0, GPIO_IN);
+    gpio_pull_up(SW_0);
+    gpio_init(SW_1);
+    gpio_set_dir(SW_1, GPIO_IN);
+    gpio_pull_up(SW_1);
+    gpio_init(SW_2);
+    gpio_set_dir(SW_2, GPIO_IN);
+    gpio_pull_up(SW_2);
 }
 
 void pwmInitializer() {
@@ -110,49 +108,49 @@ void pwmInitializer() {
     pwm_config config = pwm_get_default_config();
 
     // D1:             (2A)
-    uint d1_slice = pwm_gpio_to_slice_num(D1_LED);
-    uint d1_chanel = pwm_gpio_to_channel(D1_LED);
+    uint d1_slice = pwm_gpio_to_slice_num(D1);
+    uint d1_chanel = pwm_gpio_to_channel(D1);
     pwm_set_enabled(d1_slice, false);
     pwm_config_set_clkdiv_int(&config, DIVIDER);
     pwm_config_set_wrap(&config, PWM_FREQ);
     pwm_init(d1_slice, &config, false);
     pwm_set_chan_level(d1_slice, d1_chanel, LEVEL);
-    gpio_set_function(D1_LED, GPIO_FUNC_PWM);
+    gpio_set_function(D1, GPIO_FUNC_PWM);
     pwm_set_enabled(d1_slice, true);
 
     // D2:             (2B)
-    uint d2_slice = pwm_gpio_to_slice_num(D2_LED);
-    uint d2_chanel = pwm_gpio_to_channel(D2_LED);
+    uint d2_slice = pwm_gpio_to_slice_num(D2);
+    uint d2_chanel = pwm_gpio_to_channel(D2);
     pwm_set_enabled(d2_slice, false);
     pwm_config_set_clkdiv_int(&config, DIVIDER);
     pwm_config_set_wrap(&config, PWM_FREQ);
     pwm_init(d2_slice, &config, false);
     pwm_set_chan_level(d2_slice, d2_chanel, LEVEL);
-    gpio_set_function(D2_LED, GPIO_FUNC_PWM);
+    gpio_set_function(D2, GPIO_FUNC_PWM);
     pwm_set_enabled(d2_slice, true);
 
     //D3:              (3A)
-    uint d3_slice = pwm_gpio_to_slice_num(D3_LED);
-    uint d3_chanel = pwm_gpio_to_channel(D3_LED);
+    uint d3_slice = pwm_gpio_to_slice_num(D3);
+    uint d3_chanel = pwm_gpio_to_channel(D3);
     pwm_set_enabled(d3_slice, false);
     pwm_config_set_clkdiv_int(&config, DIVIDER);
     pwm_config_set_wrap(&config, PWM_FREQ);
     pwm_init(d3_slice, &config, false);
     pwm_set_chan_level(d3_slice, d3_chanel, LEVEL);
-    gpio_set_function(D3_LED, GPIO_FUNC_PWM);
+    gpio_set_function(D3, GPIO_FUNC_PWM);
     pwm_set_enabled(d3_slice, true);
 }
 
 void allLedOn() {
-    pwm_set_gpio_level(D1_LED, brightness);
-    pwm_set_gpio_level(D2_LED, brightness);
-    pwm_set_gpio_level(D3_LED, brightness);
+    pwm_set_gpio_level(D1, brightness);
+    pwm_set_gpio_level(D2, brightness);
+    pwm_set_gpio_level(D3, brightness);
 }
 
 void allLedOff() {
-    pwm_set_gpio_level(D1_LED, 0);
-    pwm_set_gpio_level(D2_LED, 0);
-    pwm_set_gpio_level(D3_LED, 0);
+    pwm_set_gpio_level(D1, MIN_BRIGHTNESS);
+    pwm_set_gpio_level(D2, MIN_BRIGHTNESS);
+    pwm_set_gpio_level(D3, MIN_BRIGHTNESS);
 }
 
 bool repeatingTimerCallback(struct repeating_timer *t) {
@@ -161,30 +159,36 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
     static uint button_state = 0, filter_counter = 0;
     uint new_state = 1;
 
-    new_state = gpio_get(SW1);
+    new_state = gpio_get(SW_1);
     if (button_state != new_state) {
-        if (++filter_counter >= BUTTON_FILTERING) {
+        if (++filter_counter >= BUTTON_FILTER) {
             button_state = new_state;
             filter_counter = 0;
             if (new_state == RELEASED) {
-                buttonreleased = true;
+                buttonReleased = true;
             }
         }
     } else {
         filter_counter = 0;
     }
 
-    if (true == ledstate) {
+    if (true == ledState) {
         // For SW0
-        if (!gpio_get(SW0)) { // increase
-            if(brightness < 1000) {
-                brightness += 1;
+        if (!gpio_get(SW_0)) { // increase
+            if (MIN_BRIGHTNESS <= brightness && brightness <= MAX_BRIGHTNESS) {
+                brightness += BRIGHTNESS_STEP;
+                if (brightness > MAX_BRIGHTNESS) {
+                    brightness = MAX_BRIGHTNESS;
+                }
             }
         }
         // For SW2
-        if (!gpio_get(SW2)) { // decrease
-            if(brightness > 0) {
-                brightness -= 1;
+        if (!gpio_get(SW_2)) { // decrease
+            if (MIN_BRIGHTNESS <= brightness && brightness <= MAX_BRIGHTNESS) {
+                brightness -= BRIGHTNESS_STEP;
+                if (brightness < MIN_BRIGHTNESS) {
+                    brightness = MIN_BRIGHTNESS;
+                }
             }
         }
     }
