@@ -22,17 +22,20 @@
 #define D1 22
 #define D2 21
 #define D3 20
+
 #define SW_0 9 // icreases brightness gradually if held; only in ON state
 #define SW_1 8 // ON - OFF
 #define SW_2 7 // decreases brightness gradually if held; only in ON state
+#define BUTTON_PERIOD 10 // Button sampling timer period in ms
 #define BUTTON_FILTER 5
 #define RELEASED 1
-#define PWM_FREQ 999
+
+#define PWM_FREQ 1000
 #define LEVEL 6
 #define DIVIDER 125
 #define MIN_BRIGHTNESS 0
 #define MAX_BRIGHTNESS 1000
-#define BRIGHTNESS_STEP 5
+#define BRIGHTNESS_STEP 2
 
 void ledInitalizer();
 void buttonInitializer();
@@ -41,9 +44,9 @@ void allLedOn();
 void allLedOff();
 bool repeatingTimerCallback(struct repeating_timer *t);
 
-volatile bool buttonReleased = false;
+volatile bool buttonEvent = false;
 volatile int brightness = MAX_BRIGHTNESS / 2;
-volatile bool ledState = false;
+volatile bool ledState = true;
 
 int main(void) {
 
@@ -56,12 +59,12 @@ int main(void) {
     pwmInitializer();
 
     struct repeating_timer timer;
-    add_repeating_timer_ms(10, repeatingTimerCallback, NULL, &timer);
+    add_repeating_timer_ms(BUTTON_PERIOD, repeatingTimerCallback, NULL, &timer);
 
     while (true){
 
-        if (buttonReleased) {
-            buttonReleased = false;
+        if (buttonEvent) {
+            buttonEvent = false;
             if(true == ledState) {
                 if (brightness != MIN_BRIGHTNESS) {
                     ledState = false;
@@ -112,7 +115,7 @@ void pwmInitializer() {
     uint d1_chanel = pwm_gpio_to_channel(D1);
     pwm_set_enabled(d1_slice, false);
     pwm_config_set_clkdiv_int(&config, DIVIDER);
-    pwm_config_set_wrap(&config, PWM_FREQ);
+    pwm_config_set_wrap(&config, PWM_FREQ - 1);
     pwm_init(d1_slice, &config, false);
     pwm_set_chan_level(d1_slice, d1_chanel, LEVEL);
     gpio_set_function(D1, GPIO_FUNC_PWM);
@@ -123,7 +126,7 @@ void pwmInitializer() {
     uint d2_chanel = pwm_gpio_to_channel(D2);
     pwm_set_enabled(d2_slice, false);
     pwm_config_set_clkdiv_int(&config, DIVIDER);
-    pwm_config_set_wrap(&config, PWM_FREQ);
+    pwm_config_set_wrap(&config, PWM_FREQ - 1);
     pwm_init(d2_slice, &config, false);
     pwm_set_chan_level(d2_slice, d2_chanel, LEVEL);
     gpio_set_function(D2, GPIO_FUNC_PWM);
@@ -134,7 +137,7 @@ void pwmInitializer() {
     uint d3_chanel = pwm_gpio_to_channel(D3);
     pwm_set_enabled(d3_slice, false);
     pwm_config_set_clkdiv_int(&config, DIVIDER);
-    pwm_config_set_wrap(&config, PWM_FREQ);
+    pwm_config_set_wrap(&config, PWM_FREQ - 1);
     pwm_init(d3_slice, &config, false);
     pwm_set_chan_level(d3_slice, d3_chanel, LEVEL);
     gpio_set_function(D3, GPIO_FUNC_PWM);
@@ -164,8 +167,8 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
         if (++filter_counter >= BUTTON_FILTER) {
             button_state = new_state;
             filter_counter = 0;
-            if (new_state == RELEASED) {
-                buttonReleased = true;
+            if (new_state != RELEASED) {
+                buttonEvent = true;
             }
         }
     } else {
