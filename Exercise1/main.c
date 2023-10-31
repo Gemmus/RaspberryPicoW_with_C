@@ -31,7 +31,7 @@
 #define RELEASED 1
 
 #define PWM_FREQ 1000
-#define LEVEL 6
+#define LEVEL 5
 #define DIVIDER 125
 #define MIN_BRIGHTNESS 0
 #define MAX_BRIGHTNESS 1000
@@ -117,7 +117,7 @@ void pwmInitializer() {
     pwm_config_set_clkdiv_int(&config, DIVIDER);
     pwm_config_set_wrap(&config, PWM_FREQ - 1);
     pwm_init(d1_slice, &config, false);
-    pwm_set_chan_level(d1_slice, d1_chanel, LEVEL);
+    pwm_set_chan_level(d1_slice, d1_chanel, LEVEL + 1);
     gpio_set_function(D1, GPIO_FUNC_PWM);
     pwm_set_enabled(d1_slice, true);
 
@@ -128,7 +128,7 @@ void pwmInitializer() {
     pwm_config_set_clkdiv_int(&config, DIVIDER);
     pwm_config_set_wrap(&config, PWM_FREQ - 1);
     pwm_init(d2_slice, &config, false);
-    pwm_set_chan_level(d2_slice, d2_chanel, LEVEL);
+    pwm_set_chan_level(d2_slice, d2_chanel, LEVEL + 1);
     gpio_set_function(D2, GPIO_FUNC_PWM);
     pwm_set_enabled(d2_slice, true);
 
@@ -139,7 +139,7 @@ void pwmInitializer() {
     pwm_config_set_clkdiv_int(&config, DIVIDER);
     pwm_config_set_wrap(&config, PWM_FREQ - 1);
     pwm_init(d3_slice, &config, false);
-    pwm_set_chan_level(d3_slice, d3_chanel, LEVEL);
+    pwm_set_chan_level(d3_slice, d3_chanel, LEVEL + 1);
     gpio_set_function(D3, GPIO_FUNC_PWM);
     pwm_set_enabled(d3_slice, true);
 }
