@@ -178,14 +178,12 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
         // For SW0
         if (!gpio_get(SW0)) { // increase
             if(brightness < 1000) {
-                printf("Brightness: %d\n", brightness);
                 brightness += 1;
             }
         }
         // For SW2
         if (!gpio_get(SW2)) { // decrease
             if(brightness > 0) {
-                printf("Brightness to: %d\n", brightness);
                 brightness -= 1;
             }
         }
