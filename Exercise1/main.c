@@ -12,20 +12,6 @@
  * • PWM frequency divider must be configured to output 1 MHz frequency and PWM frequency must be 1 kHz.
  */
 
-/*
- * Follow instructions in clion_setup.pdf to create CMake project.
- * Implement a program for switching LEDs on/off and dimming them. The program should work as follows:
- * • SW1, the middle button is the on/off button. When button is pressed the state of LEDs is toggled.
- * Program must require the button to be released before the LEDs toggle again. Holding the button
- * may not cause LEDs to toggle multiple times.
- * • SW0 and SW2 are used to control dimming when LEDs are in ON state. SW0 increases brightness
- *   and SW2 decreases brightness. Holding a button makes the brightness to increase/decrease
- *   smoothly. If LEDs are in OFF state the buttons have no effect.
- * • When LED state is toggled to ON the program must use same brightness of the LEDs they were at
- *   when they were switched off. If LEDs were dimmed to 0% then toggling them on will set 50% brightness.
- * • PWM frequency divider must be configured to output 1 MHz frequency and PWM frequency must be 1 kHz.
- */
-
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "pico/time.h"
@@ -94,9 +80,6 @@ int main(void) {
             allLedOn();
         } else {
             allLedOff();
-            if (0 == brightness) {
-                brightness = 500;
-            }
         }
     }
 }
@@ -197,7 +180,6 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
             if(brightness < 1000) {
                 printf("Brightness: %d\n", brightness);
                 brightness += 1;
-                printf("Brightness: %d", brightness);
             }
         }
         // For SW2
@@ -205,7 +187,6 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
             if(brightness > 0) {
                 printf("Brightness to: %d\n", brightness);
                 brightness -= 1;
-                printf("Brightness: %d", brightness);
             }
         }
     }
