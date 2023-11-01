@@ -1,3 +1,18 @@
+/* Implement a program for switching LEDs on/off and dimming them. The program should work as follows:
+ * • Rot_Sw, the push button on the rotary encoder shaft is the on/off button. When button is pressed
+ *   the state of LEDs is toggled. Program must require the button to be released before the LEDs toggle
+ *   again. Holding the button may not cause LEDs to toggle multiple times.
+ * • Rotary encoder is used to control brightness of the LEDs. Turning the knob clockwise increases
+ *   brightness and turning counter-clockwise reduces brightness. If LEDs are in OFF state turning the
+ *   knob has no effect.
+ * • When LED state is toggled to ON the program must use same brightness of the LEDs they were at
+ *   when they were switched off. If LEDs were dimmed to 0% then toggling them on will set 50%
+ *   brightness.
+ * • PWM frequency divider must be configured to output 1 MHz frequency and PWM frequency must
+ *   be 1 kHz.
+ * You must use GPIO interrupts for detecting the encoder turns.
+ */
+
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "pico/time.h"
@@ -21,7 +36,7 @@
 #define DIVIDER 125
 #define MIN_BRIGHTNESS 0
 #define MAX_BRIGHTNESS 1000
-#define BRIGHTNESS_STEP 2
+#define BRIGHTNESS_STEP 20
 
 void ledsInit();
 void pwmInit();
@@ -34,8 +49,6 @@ void encoderAInterruptHandler(uint gpio, uint32_t events);
 volatile bool buttonEvent = false;
 volatile int brightness = MAX_BRIGHTNESS / 2;
 volatile bool ledState = true;
-volatile int rotPosition = 0;
-volatile int lastRotState = 0;
 
 int main(void) {
 
@@ -166,44 +179,29 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
         filter_counter = 0;
     }
 
-    if (true == ledState) {
-
-        if (gpio_get(ROT_A) == 1) {
-            if (gpio_get(ROT_B) == 0) {
-                if (MIN_BRIGHTNESS <= brightness && brightness <= MAX_BRIGHTNESS) {
-                    brightness -= BRIGHTNESS_STEP;
-                    if (brightness < MIN_BRIGHTNESS) {
-                        brightness = MIN_BRIGHTNESS;
-                    }
-                }
-            } else {
-                if (MIN_BRIGHTNESS <= brightness && brightness <= MAX_BRIGHTNESS) {
-                    brightness += BRIGHTNESS_STEP;
-                    if (brightness > MAX_BRIGHTNESS) {
-                        brightness = MAX_BRIGHTNESS;
-                    }
-                }
-            }
-        }
-    }
-
     return true;
 }
 
 void encoderAInterruptHandler(uint gpio, uint32_t events) {
-    int rotA_state = gpio_get(ROT_A);
+
     int rotB_state = gpio_get(ROT_B);
 
     if (true == ledState) {
-        if (rotA_state != lastRotState) {
-            if (rotA_state == 1) {
-                if (rotB_state == 0) {
-                    rotPosition--;
-                } else {
-                    rotPosition++;
+        if (rotB_state == 0) {
+
+            if (MIN_BRIGHTNESS <= brightness && brightness <= MAX_BRIGHTNESS) {
+                brightness += BRIGHTNESS_STEP;
+                if (brightness > MAX_BRIGHTNESS) {
+                    brightness = MAX_BRIGHTNESS;
                 }
             }
-            lastRotState = rotA_state;
-        }
+        } else {
+            if (MIN_BRIGHTNESS <= brightness && brightness <= MAX_BRIGHTNESS) {
+                brightness -= BRIGHTNESS_STEP;
+                if (brightness < MIN_BRIGHTNESS) {
+                    brightness = MIN_BRIGHTNESS;
+                }
+            }
+       }
     }
 }
