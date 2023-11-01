@@ -42,7 +42,7 @@ int main(void) {
     stdio_init_all();
 
     rotInit();
-    gpio_set_irq_enabled_with_callback(ROT_A, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, encoderAInterruptHandler);
+    gpio_set_irq_enabled_with_callback(ROT_A, GPIO_IRQ_EDGE_RISE, true, encoderAInterruptHandler);
 
     ledsInit();
 
