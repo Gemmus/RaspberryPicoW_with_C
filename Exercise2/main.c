@@ -188,7 +188,6 @@ void encoderAInterruptHandler(uint gpio, uint32_t events) {
 
     if (true == ledState) {
         if (rotB_state == 0) {
-
             if (MIN_BRIGHTNESS <= brightness && brightness <= MAX_BRIGHTNESS) {
                 brightness += BRIGHTNESS_STEP;
                 if (brightness > MAX_BRIGHTNESS) {
