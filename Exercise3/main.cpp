@@ -58,7 +58,7 @@ switch(state) {
 #include "hardware/pwm.h"
 
 #define SW_0 9
-#define BUTTON_PERIOD 10 // Button sampling timer period in ms
+#define BUTTON_PERIOD 10
 #define BUTTON_FILTER 5
 #define RELEASED 1
 
@@ -139,9 +139,7 @@ int main(void) {
                 sleep_ms(500);
                 pos = uart_read(UART_NR, (uint8_t *) str, STRLEN);
                 if (pos > 0) {
-                    //str[pos] = '\0';
                     printf("Connected to LoRa module.\n");
-                    //printf("%d, received: %s\n", time_us_32() / 1000, str);
                     firmware_version_read = true;
                     pos = 0;
                     break;
