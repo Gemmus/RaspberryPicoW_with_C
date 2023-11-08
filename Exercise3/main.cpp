@@ -48,35 +48,71 @@ switch(state) {
 */
 
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 #include "pico/stdlib.h"
 #include "pico/time.h"
 #include "hardware/irq.h"
 #include "hardware/gpio.h"
+#include "uart.h"
+#include "hardware/pwm.h"
 
 #define SW_0 9
 #define BUTTON_PERIOD 10 // Button sampling timer period in ms
 #define BUTTON_FILTER 5
 #define RELEASED 1
-#define BAUD_RATE
-#define UART_TX_PIN
-#define UART_RX_PIN
+
+#define D1 22
+#define D2 21
+#define D3 20
+#define BRIGHTNESS 20
+#define MIN_BRIGHTNESS 0
+#define PWM_FREQ 1000
+#define LEVEL 5
+#define DIVIDER 125
+
+#if 0
+#define UART_NR 0
+#define UART_TX_PIN 0
+#define UART_RX_PIN 1
+#else
+#define UART_NR 1
+#define UART_TX_PIN 4
+#define UART_RX_PIN 5
+#endif
+
+#define BAUD_RATE 9600
+
+#define STRLEN 80
 
 void buttonInit();
 bool repeatingTimerCallback(struct repeating_timer *t);
+void ledsInit();
+void pwmInit();
+void allLedsOn();
+void allLedsOff();
+void removeColonsAndLowercase(char *input, char *output);
 
 volatile bool buttonEvent = false;
 volatile bool lo_ra_comm = false;
-volatile bool no_reply = true;
+volatile bool firmware_version_read = false;
+volatile bool DevEui_read = false;
 
 int main(void) {
 
     stdio_init_all();
 
     buttonInit();
-    //  uart_init(uart0, BAUD_RATE);
-    //gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
-    //gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+    ledsInit();
+    pwmInit();
 
+    uart_setup(UART_NR, UART_TX_PIN, UART_RX_PIN, BAUD_RATE);
+
+    const char AT_command[] = "AT\r\n";
+    const char AT_VER_command[] = "AT+VER\r\n";
+    const char DevEui_command[] = "AT+ID=DevEui\r\n";
+    char str[STRLEN];
+    int pos = 0;
 
     struct repeating_timer timer;
     add_repeating_timer_ms(BUTTON_PERIOD, repeatingTimerCallback, NULL, &timer);
@@ -87,13 +123,73 @@ int main(void) {
             buttonEvent = false;
             if (true == lo_ra_comm) {
                 lo_ra_comm = false;
+                allLedsOff();
             } else {
                 lo_ra_comm = true;
+                allLedsOn();
             }
         }
 
         if (true == lo_ra_comm) {
-            // lo_ra_comm
+
+            uint count = 0;
+
+            while (5 > count++) {
+                uart_send(UART_NR, AT_command);
+                sleep_ms(500);
+                pos = uart_read(UART_NR, (uint8_t *) str, STRLEN);
+                if (pos > 0) {
+                    //str[pos] = '\0';
+                    printf("Connected to LoRa module.\n");
+                    //printf("%d, received: %s\n", time_us_32() / 1000, str);
+                    firmware_version_read = true;
+                    pos = 0;
+                    break;
+                }
+            }
+
+            if (5 == count) {
+                printf("Module not responding.\n");
+                lo_ra_comm = false;
+                allLedsOff();
+            }
+
+            if (true == firmware_version_read) {
+                uart_send(UART_NR, AT_VER_command);
+                sleep_ms(500);
+                pos = uart_read(UART_NR, (uint8_t *) str, STRLEN);
+                if (pos > 0) {
+                    str[pos] = '\0';
+                    printf("%d, received: %s", time_us_32() / 1000, str);
+                    pos = 0;
+                    DevEui_read = true;
+                    firmware_version_read = false;
+                } else if (pos == 0) {
+                    printf("Module stopped responding.\n");
+                    lo_ra_comm = false;
+                    allLedsOff();
+                }
+            }
+
+            if (true == DevEui_read) {
+                uart_send(UART_NR, DevEui_command);
+                sleep_ms(500);
+                pos = uart_read(UART_NR, (uint8_t *) str, STRLEN);
+                if (pos > 0) {
+                    str[pos] = '\0';
+                    char modified_str[STRLEN];
+                    char *devEui = strstr(str, "DevEui,");
+                    devEui += 7;
+                    removeColonsAndLowercase(devEui, modified_str);
+                    printf("%s\n", modified_str);
+                    pos = 0;
+                    DevEui_read = false;
+                } else if (pos == 0) {
+                    printf("Module stopped responding.\n");
+                }
+                lo_ra_comm = false;
+                allLedsOff();            }
+
         }
     }
 }
@@ -102,6 +198,67 @@ void buttonInit() {
     gpio_init(SW_0);
     gpio_set_dir(SW_0, GPIO_IN);
     gpio_pull_up(SW_0);
+}
+
+void ledsInit() {
+    gpio_init(D3);
+    gpio_set_dir(D3, GPIO_OUT);
+    gpio_init(D2);
+    gpio_set_dir(D2, GPIO_OUT);
+    gpio_init(D1);
+    gpio_set_dir(D1, GPIO_OUT);
+}
+
+void pwmInit() {
+
+    pwm_config config = pwm_get_default_config();
+
+    // D1:             (2A)
+    uint d1_slice = pwm_gpio_to_slice_num(D1);
+    uint d1_chanel = pwm_gpio_to_channel(D1);
+    pwm_set_enabled(d1_slice, false);
+    pwm_config_set_clkdiv_int(&config, DIVIDER);
+    pwm_config_set_wrap(&config, PWM_FREQ - 1);
+    pwm_init(d1_slice, &config, false);
+    pwm_set_chan_level(d1_slice, d1_chanel, LEVEL + 1);
+    gpio_set_function(D1, GPIO_FUNC_PWM);
+    pwm_set_enabled(d1_slice, true);
+
+    // D2:             (2B)
+    uint d2_slice = pwm_gpio_to_slice_num(D2);
+    uint d2_chanel = pwm_gpio_to_channel(D2);
+    pwm_set_enabled(d2_slice, false);
+    pwm_config_set_clkdiv_int(&config, DIVIDER);
+    pwm_config_set_wrap(&config, PWM_FREQ - 1);
+    pwm_init(d2_slice, &config, false);
+    pwm_set_chan_level(d2_slice, d2_chanel, LEVEL + 1);
+    gpio_set_function(D2, GPIO_FUNC_PWM);
+    pwm_set_enabled(d2_slice, true);
+
+    //D3:              (3A)
+    uint d3_slice = pwm_gpio_to_slice_num(D3);
+    uint d3_chanel = pwm_gpio_to_channel(D3);
+    pwm_set_enabled(d3_slice, false);
+    pwm_config_set_clkdiv_int(&config, DIVIDER);
+    pwm_config_set_wrap(&config, PWM_FREQ - 1);
+    pwm_init(d3_slice, &config, false);
+    pwm_set_chan_level(d3_slice, d3_chanel, LEVEL + 1);
+    gpio_set_function(D3, GPIO_FUNC_PWM);
+    pwm_set_enabled(d3_slice, true);
+
+    allLedsOff();
+}
+
+void allLedsOn() {
+    pwm_set_gpio_level(D1, BRIGHTNESS);
+    pwm_set_gpio_level(D2, BRIGHTNESS);
+    pwm_set_gpio_level(D3, BRIGHTNESS);
+}
+
+void allLedsOff() {
+    pwm_set_gpio_level(D1, MIN_BRIGHTNESS);
+    pwm_set_gpio_level(D2, MIN_BRIGHTNESS);
+    pwm_set_gpio_level(D3, MIN_BRIGHTNESS);
 }
 
 bool repeatingTimerCallback(struct repeating_timer *t) {
@@ -124,4 +281,18 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
     }
 
     return true;
+}
+
+void removeColonsAndLowercase(char *input, char *output) {
+    int inputLength = strlen(input);
+    int outputIndex = 0;
+
+    for (int i = 0; i < inputLength; i++) {
+        if (isxdigit(input[i])) {
+            output[outputIndex] = tolower(input[i]);
+            outputIndex++;
+        }
+    }
+
+    output[outputIndex] = '\0';
 }
