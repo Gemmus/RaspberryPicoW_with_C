@@ -91,7 +91,7 @@ void ledsInit();
 void pwmInit();
 void allLedsOn();
 void allLedsOff();
-void removeColonsAndLowercase(char *input, char *output);
+void removeColonsAndLowercase(const char *input, char *output);
 
 volatile bool buttonEvent = false;
 
@@ -137,7 +137,7 @@ int main(void) {
             while (5 > count++) {
                 uart_send(UART_NR, AT_command);
                 sleep_ms(500);
-                pos = uart_read(UART_NR, (uint8_t *) str, STRLEN);
+                pos = uart_read(UART_NR, (uint8_t *) str, STRLEN - 1);
                 if (pos > 0) {
                     printf("Connected to LoRa module.\n");
                     firmware_version_read = true;
@@ -155,14 +155,14 @@ int main(void) {
             if (true == firmware_version_read) {
                 uart_send(UART_NR, AT_VER_command);
                 sleep_ms(500);
-                pos = uart_read(UART_NR, (uint8_t *) str, STRLEN);
+                pos = uart_read(UART_NR, (uint8_t *) str, STRLEN - 1);
                 if (pos > 0) {
                     str[pos] = '\0';
                     printf("%d, received: %s", time_us_32() / 1000, str);
                     pos = 0;
                     DevEui_read = true;
                     firmware_version_read = false;
-                } else if (pos == 0) {
+                } else {
                     printf("Module stopped responding.\n");
                     lo_ra_comm = false;
                     allLedsOff();
@@ -172,22 +172,22 @@ int main(void) {
             if (true == DevEui_read) {
                 uart_send(UART_NR, DevEui_command);
                 sleep_ms(500);
-                pos = uart_read(UART_NR, (uint8_t *) str, STRLEN);
+                pos = uart_read(UART_NR, (uint8_t *) str, STRLEN - 1);
                 if (pos > 0) {
                     str[pos] = '\0';
                     char modified_str[STRLEN];
                     char *devEui = strstr(str, "DevEui,");
-                    devEui += 7;
+                    devEui += strlen("DevEui,");
                     removeColonsAndLowercase(devEui, modified_str);
                     printf("%s\n", modified_str);
                     pos = 0;
                     DevEui_read = false;
-                } else if (pos == 0) {
+                } else {
                     printf("Module stopped responding.\n");
                 }
                 lo_ra_comm = false;
-                allLedsOff();            }
-
+                allLedsOff();
+            }
         }
     }
 }
@@ -281,12 +281,12 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
     return true;
 }
 
-void removeColonsAndLowercase(char *input, char *output) {
+void removeColonsAndLowercase(const char *input, char *output) {
     int inputLength = strlen(input);
     int outputIndex = 0;
 
     for (int i = 0; i < inputLength; i++) {
-        if (isxdigit(input[i])) {
+        if (isxdigit((unsigned char) input[i])) {
             output[outputIndex] = tolower(input[i]);
             outputIndex++;
         }
