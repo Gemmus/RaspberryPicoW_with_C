@@ -94,9 +94,6 @@ void allLedsOff();
 void removeColonsAndLowercase(char *input, char *output);
 
 volatile bool buttonEvent = false;
-volatile bool lo_ra_comm = false;
-volatile bool firmware_version_read = false;
-volatile bool DevEui_read = false;
 
 int main(void) {
 
@@ -108,6 +105,9 @@ int main(void) {
 
     uart_setup(UART_NR, UART_TX_PIN, UART_RX_PIN, BAUD_RATE);
 
+    bool lo_ra_comm = false;
+    bool firmware_version_read = false;
+    bool DevEui_read = false;
     const char AT_command[] = "AT\r\n";
     const char AT_VER_command[] = "AT+VER\r\n";
     const char DevEui_command[] = "AT+ID=DevEui\r\n";
