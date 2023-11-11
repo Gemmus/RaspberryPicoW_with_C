@@ -142,9 +142,14 @@ int main(void) {
                 const int uart_nr = UART_NR;
                 const int us_waiting_time = WAITING_TIME * 1000;
                 uart_send(uart_nr, AT_command);
+                sleep_ms(100);
                 if(uart_is_readable_within_us((uart_inst_t *) &uart_nr, (uint32_t) us_waiting_time)) {
                     printf("Connected to LoRa module.\n");
                     firmware_version_read = true;
+                    pos = uart_read(UART_NR, (uint8_t *) str, STRLEN - 1);
+                    str[pos] = '\0';
+                    //printf("%d, %d received: %s", time_us_32() / 1000, pos, str);
+                    pos = 0;
                     break;
                 }
             }
