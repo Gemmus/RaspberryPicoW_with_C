@@ -82,6 +82,8 @@ switch(state) {
 #endif
 
 #define BAUD_RATE 9600
+#define WAITING_TIME 500
+#define MAX_COUNT 5
 
 #define STRLEN 80
 
@@ -134,9 +136,23 @@ int main(void) {
 
             uint count = 0;
 
+            // Using uart_is_readable_within_us:
+
+            while (MAX_COUNT > count++) {
+                const int uart_nr = UART_NR;
+                uart_send(uart_nr, AT_command);
+                if(uart_is_readable_within_us((uart_inst_t *) &uart_nr, (uint32_t) WAITING_TIME)) {
+                    printf("Connected to LoRa module.\n");
+                    firmware_version_read = true;
+                    break;
+                }
+            }
+
+            // Using sleep_ms:
+/*
             while (5 > count++) {
                 uart_send(UART_NR, AT_command);
-                sleep_ms(500);
+                sleep_ms(WAITING_TIME);
                 pos = uart_read(UART_NR, (uint8_t *) str, STRLEN - 1);
                 if (pos > 0) {
                     printf("Connected to LoRa module.\n");
@@ -145,8 +161,9 @@ int main(void) {
                     break;
                 }
             }
+*/
 
-            if (5 == count) {
+            if (MAX_COUNT == count) {
                 printf("Module not responding.\n");
                 lo_ra_comm = false;
                 allLedsOff();
@@ -154,7 +171,7 @@ int main(void) {
 
             if (true == firmware_version_read) {
                 uart_send(UART_NR, AT_VER_command);
-                sleep_ms(500);
+                sleep_ms(WAITING_TIME);
                 pos = uart_read(UART_NR, (uint8_t *) str, STRLEN - 1);
                 if (pos > 0) {
                     str[pos] = '\0';
@@ -171,7 +188,7 @@ int main(void) {
 
             if (true == DevEui_read) {
                 uart_send(UART_NR, DevEui_command);
-                sleep_ms(500);
+                sleep_ms(WAITING_TIME);
                 pos = uart_read(UART_NR, (uint8_t *) str, STRLEN - 1);
                 if (pos > 0) {
                     str[pos] = '\0';
