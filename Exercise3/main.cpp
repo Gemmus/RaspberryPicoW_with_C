@@ -140,8 +140,9 @@ int main(void) {
 
             while (MAX_COUNT > count++) {
                 const int uart_nr = UART_NR;
+                const int us_waiting_time = WAITING_TIME * 1000;
                 uart_send(uart_nr, AT_command);
-                if(uart_is_readable_within_us((uart_inst_t *) &uart_nr, (uint32_t) WAITING_TIME)) {
+                if(uart_is_readable_within_us((uart_inst_t *) &uart_nr, (uint32_t) us_waiting_time)) {
                     printf("Connected to LoRa module.\n");
                     firmware_version_read = true;
                     break;
