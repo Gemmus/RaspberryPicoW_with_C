@@ -150,7 +150,7 @@ int main(void) {
 
             // Using sleep_ms:
 /*
-            while (5 > count++) {
+            while (MAX_COUNT > count++) {
                 uart_send(UART_NR, AT_command);
                 sleep_ms(WAITING_TIME);
                 pos = uart_read(UART_NR, (uint8_t *) str, STRLEN - 1);
