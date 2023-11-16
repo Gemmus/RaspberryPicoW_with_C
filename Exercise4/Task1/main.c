@@ -27,7 +27,7 @@ where both bytes are identical, a typical case with erased/out of the box memory
 #define I2C0_SDA_PIN 16
 #define I2C0_SCL_PIN 17
 
-#define DEVADDR 0x20
+#define DEVADDR 0x50
 
 int main() {
 
