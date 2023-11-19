@@ -22,59 +22,331 @@ where both bytes are identical, a typical case with erased/out of the box memory
 
 #include <stdio.h>
 #include "pico/stdlib.h"
+#include "pico/time.h"
 #include "hardware/i2c.h"
+#include "hardware/irq.h"
+#include "hardware/gpio.h"
+#include "hardware/pwm.h"
 
+/*  LEDs  */
+#define D1 22
+#define D2 21
+#define D3 20
+
+/* BUTTONS */
+#define SW_0 9
+#define SW_1 8
+#define SW_2 7
+#define BUTTON_PERIOD 10
+#define BUTTON_FILTER 5
+#define SW0_RELEASED 1
+#define SW1_RELEASED 1
+#define SW2_RELEASED 1
+
+/*   PWM   */
+#define PWM_FREQ 1000
+#define LEVEL 5
+#define DIVIDER 125
+#define BRIGHTNESS 200
+#define MIN_BRIGHTNESS 0
+
+/*   I2C   */
 #define I2C0_SDA_PIN 16
 #define I2C0_SCL_PIN 17
-
+#define BAUDRATE 100000
 #define DEVADDR 0x50
 
+/* FUNCTIONS */
+void ledsInit();
+void buttonsInit();
+void i2cInit();
+void pwmInit();
+void ledOn(uint led_pin);
+void ledOff(uint led_pin);
+void ledsInitState();
+bool repeatingTimerCallback(struct repeating_timer *t);
+void i2c_write_byte(uint16_t address, uint8_t data);
+uint8_t i2c_read_byte(uint16_t address);
+
+volatile bool sw0_buttonEvent = false;
+volatile bool sw1_buttonEvent = false;
+volatile bool sw2_buttonEvent = false;
+
+volatile bool d1State = false;
+volatile bool d2State = false;
+volatile bool d3State = false;
+
+const uint8_t d1_address = 0xD1;
+const uint8_t d2_address = 0xD2;
+const uint8_t d3_address = 0xD3;
+
 int main() {
-
-    const uint led_pin = 22;
-
-    gpio_init(led_pin);
-    gpio_set_dir(led_pin, GPIO_OUT);
 
     stdio_init_all();
     printf("\nBoot\n");
 
-    i2c_init(i2c0, 100000);
-    gpio_set_function(I2C0_SDA_PIN, GPIO_FUNC_I2C);
-    gpio_set_function(I2C0_SCL_PIN, GPIO_FUNC_I2C);
+    ledsInit();
+    pwmInit();
+    buttonsInit();
+    i2cInit();
 
-    uint8_t buf[8] = {0x00, 0x20};
-    i2c_write_blocking(i2c0, DEVADDR, buf, 2, false);
+    uint8_t d1_data = i2c_read_byte(d1_address);
+    uint8_t d2_data = i2c_read_byte(d2_address);
+    uint8_t d3_data = i2c_read_byte(d3_address);
 
-    buf[0] = 0x12;
-    buf[1] = 0x01;
-    i2c_write_blocking(i2c0, DEVADDR, buf, 2, false);
+    if (d1_data != 0 && d1_data != 1 && d2_data != 0 && d2_data != 1 && d3_data != 0 && d3_data != 1) { // No valid state found
+        ledsInitState();
+    } else {
+        if (1 == d1_data) {
+            d1State = true;
+            ledOn(D1);
+        } else {
+            ledOff(D1);
+        }
+        if (1 == d2_data) {
+            d2State = true;
+            ledOn(D2);
+        } else {
+            ledOff(D2);
+        }
+        if (true == d3_data) {
+            d3State = true;
+            ledOn(D3);
+        } else {
+            ledOff(D3);
+        }
+    }
 
-    buf[0] = 0x0C;
-    buf[1] = 0x20;
-    i2c_write_blocking(i2c0, DEVADDR, buf, 2, false);
+    struct repeating_timer timer;
+    add_repeating_timer_ms(BUTTON_PERIOD, repeatingTimerCallback, NULL, &timer);
 
     while (true) {
-        uint8_t value;
-        buf[0] = 0x12;
-        i2c_write_blocking(i2c0, DEVADDR, buf, 1, true);
-        i2c_read_blocking(i2c0, DEVADDR, &value, 1, false);
 
-        // Blink LED
-        printf("value:  %02X\r\n", value & 0x20);
-        gpio_put(led_pin, true);
-        buf[0] = 0x12;
-        buf[1] = 0x81;
-        i2c_write_blocking(i2c0, DEVADDR, buf, 2, false);
-        //printf("value:  %02X\r\n", value & 0x20);
-        sleep_ms(500);
-        gpio_put(led_pin, false);
-        buf[0] = 0x12;
-        buf[1] = 0x80;
-        i2c_write_blocking(i2c0, DEVADDR, buf, 2, false);
-        sleep_ms(500);
+        /* SW0 - D3 */
+        if (sw0_buttonEvent) {
+            sw0_buttonEvent = false;
+            if(true == d3State) {
+                d3State = false;
+            } else {
+                d3State = true;
+            }
+            i2c_write_byte(d3_address,d3State);
+            d3_data = i2c_read_byte(d3_address);
+            printf("Data at address 0xD3: %d\n", d3_data);
+        }
+
+        if (true == d3State) {
+            ledOn(D3);
+        } else {
+            ledOff(D3);
+        }
+
+        /* SW1 - D2 */
+        if (sw1_buttonEvent) {
+            sw1_buttonEvent = false;
+            if(true == d2State) {
+                d2State = false;
+            } else {
+                d2State = true;
+            }
+            i2c_write_byte(d2_address,d2State);
+            d2_data = i2c_read_byte(d2_address);
+            printf("Data at address 0xD2: %d\n", d2_data);
+        }
+
+        if (true == d2State) {
+            ledOn(D2);
+        } else {
+            ledOff(D2);
+        }
+
+        /* SW2 - D1 */
+        if (sw2_buttonEvent) {
+            sw2_buttonEvent = false;
+            if(true == d1State) {
+                d1State = false;
+            } else {
+                d1State = true;
+            }
+            i2c_write_byte(d1_address,d1State);
+            d1_data = i2c_read_byte(d1_address);
+            printf("Data at address 0xD1: %d\n", d1_data);
+        }
+
+        if (true == d1State) {
+            ledOn(D1);
+        } else {
+            ledOff(D1);
+        }
+
+
+
 
     }
 
     return 0;
+}
+
+void ledsInit() {
+    gpio_init(D3);
+    gpio_set_dir(D3, GPIO_OUT);
+    gpio_init(D2);
+    gpio_set_dir(D2, GPIO_OUT);
+    gpio_init(D1);
+    gpio_set_dir(D1, GPIO_OUT);
+}
+
+void buttonsInit() {
+    gpio_init(SW_0);
+    gpio_set_dir(SW_0, GPIO_IN);
+    gpio_pull_up(SW_0);
+    gpio_init(SW_1);
+    gpio_set_dir(SW_1, GPIO_IN);
+    gpio_pull_up(SW_1);
+    gpio_init(SW_2);
+    gpio_set_dir(SW_2, GPIO_IN);
+    gpio_pull_up(SW_2);
+}
+
+void pwmInit() {
+
+    pwm_config config = pwm_get_default_config();
+
+    // D1:             (2A)
+    uint d1_slice = pwm_gpio_to_slice_num(D1);
+    uint d1_chanel = pwm_gpio_to_channel(D1);
+    pwm_set_enabled(d1_slice, false);
+    pwm_config_set_clkdiv_int(&config, DIVIDER);
+    pwm_config_set_wrap(&config, PWM_FREQ - 1);
+    pwm_init(d1_slice, &config, false);
+    pwm_set_chan_level(d1_slice, d1_chanel, LEVEL + 1);
+    gpio_set_function(D1, GPIO_FUNC_PWM);
+    pwm_set_enabled(d1_slice, true);
+
+    // D2:             (2B)
+    uint d2_slice = pwm_gpio_to_slice_num(D2);
+    uint d2_chanel = pwm_gpio_to_channel(D2);
+    pwm_set_enabled(d2_slice, false);
+    pwm_config_set_clkdiv_int(&config, DIVIDER);
+    pwm_config_set_wrap(&config, PWM_FREQ - 1);
+    pwm_init(d2_slice, &config, false);
+    pwm_set_chan_level(d2_slice, d2_chanel, LEVEL + 1);
+    gpio_set_function(D2, GPIO_FUNC_PWM);
+    pwm_set_enabled(d2_slice, true);
+
+    //D3:              (3A)
+    uint d3_slice = pwm_gpio_to_slice_num(D3);
+    uint d3_chanel = pwm_gpio_to_channel(D3);
+    pwm_set_enabled(d3_slice, false);
+    pwm_config_set_clkdiv_int(&config, DIVIDER);
+    pwm_config_set_wrap(&config, PWM_FREQ - 1);
+    pwm_init(d3_slice, &config, false);
+    pwm_set_chan_level(d3_slice, d3_chanel, LEVEL + 1);
+    gpio_set_function(D3, GPIO_FUNC_PWM);
+    pwm_set_enabled(d3_slice, true);
+
+    pwm_set_gpio_level(D1, MIN_BRIGHTNESS);
+    pwm_set_gpio_level(D2, MIN_BRIGHTNESS);
+    pwm_set_gpio_level(D3, MIN_BRIGHTNESS);
+
+}
+
+void i2cInit() {
+    i2c_init(i2c0, BAUDRATE);
+    gpio_set_function(I2C0_SDA_PIN, GPIO_FUNC_I2C);
+    gpio_set_function(I2C0_SCL_PIN, GPIO_FUNC_I2C);
+}
+
+void ledOn(uint led_pin) {
+    pwm_set_gpio_level(led_pin, BRIGHTNESS);
+}
+
+void ledOff(uint led_pin) {
+    pwm_set_gpio_level(led_pin, MIN_BRIGHTNESS);
+}
+
+void ledsInitState() {
+    pwm_set_gpio_level(D1, MIN_BRIGHTNESS);
+    i2c_write_byte(d1_address,d1State);
+    uint8_t d1_data = i2c_read_byte(d1_address);
+    printf("Data at address 0xD1: %d\n", d1_data);
+
+    pwm_set_gpio_level(D2, BRIGHTNESS);
+    d2State = true;
+    i2c_write_byte(d2_address,d2State);
+    uint8_t d2_data = i2c_read_byte(d2_address);
+    printf("Data at address 0xD2: %d\n", d2_data);
+
+    pwm_set_gpio_level(D3, MIN_BRIGHTNESS);
+    i2c_write_byte(d3_address,d3State);
+    uint8_t d3_data = i2c_read_byte(d3_address);
+    printf("Data at address 0xD3: %d\n", d3_data);
+}
+
+bool repeatingTimerCallback(struct repeating_timer *t) {
+
+    static uint sw0_button_state = 0, sw0_filter_counter = 0;
+    uint sw0_new_state = 1;
+
+    sw0_new_state = gpio_get(SW_0);
+    if (sw0_button_state != sw0_new_state) {
+        if (++sw0_filter_counter >= BUTTON_FILTER) {
+            sw0_button_state = sw0_new_state;
+            sw0_filter_counter = 0;
+            if (sw0_new_state != SW0_RELEASED) {
+                sw0_buttonEvent = true;
+            }
+        }
+    } else {
+        sw0_filter_counter = 0;
+    }
+
+    static uint sw1_button_state = 0, sw1_filter_counter = 0;
+    uint sw1_new_state = 1;
+
+    sw1_new_state = gpio_get(SW_1);
+    if (sw1_button_state != sw1_new_state) {
+        if (++sw1_filter_counter >= BUTTON_FILTER) {
+            sw1_button_state = sw1_new_state;
+            sw1_filter_counter = 0;
+            if (sw1_new_state != SW1_RELEASED) {
+                sw1_buttonEvent = true;
+            }
+        }
+    } else {
+        sw1_filter_counter = 0;
+    }
+
+    static uint sw2_button_state = 0, sw2_filter_counter = 0;
+    uint sw2_new_state = 1;
+
+    sw2_new_state = gpio_get(SW_2);
+    if (sw2_button_state != sw2_new_state) {
+        if (++sw2_filter_counter >= BUTTON_FILTER) {
+            sw2_button_state = sw2_new_state;
+            sw2_filter_counter = 0;
+            if (sw2_new_state != SW2_RELEASED) {
+                sw2_buttonEvent = true;
+            }
+        }
+    } else {
+        sw2_filter_counter = 0;
+    }
+
+    return true;
+}
+
+void i2c_write_byte(uint16_t address, uint8_t data) {
+    uint8_t buffer[3];
+    buffer[0] = address >> 8; buffer[1] = address; buffer[2] = data;
+    int retval = i2c_write_blocking(i2c0, DEVADDR, buffer, sizeof(buffer), false);
+    sleep_ms(500);
+}
+
+uint8_t i2c_read_byte(uint16_t address) {
+    uint8_t buffer[2];
+    buffer[0] = address >> 8; buffer[1] = address;
+    i2c_write_blocking(i2c0, DEVADDR, buffer, 2, true);
+    i2c_read_blocking(i2c0, DEVADDR, buffer, 1, false);
+    return buffer[0];
 }
