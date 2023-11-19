@@ -224,7 +224,7 @@ void pwmInit() {
     gpio_set_function(D2, GPIO_FUNC_PWM);
     pwm_set_enabled(d2_slice, true);
 
-    //D3:              (3A)
+    // D3:              (3A)
     uint d3_slice = pwm_gpio_to_slice_num(D3);
     uint d3_chanel = pwm_gpio_to_channel(D3);
     pwm_set_enabled(d3_slice, false);
