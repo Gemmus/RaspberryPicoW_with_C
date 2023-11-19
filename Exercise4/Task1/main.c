@@ -53,8 +53,9 @@ where both bytes are identical, a typical case with erased/out of the box memory
 /*   I2C   */
 #define I2C0_SDA_PIN 16
 #define I2C0_SCL_PIN 17
-#define BAUDRATE 100000
 #define DEVADDR 0x50
+#define BAUDRATE 100000
+#define I2C_MEMORY_SIZE (2^15)
 
 /* FUNCTIONS */
 void ledsInit();
@@ -64,10 +65,12 @@ void pwmInit();
 void ledOn(uint led_pin);
 void ledOff(uint led_pin);
 void ledsInitState();
+void printState();
 bool repeatingTimerCallback(struct repeating_timer *t);
 void i2c_write_byte(uint16_t address, uint8_t data);
 uint8_t i2c_read_byte(uint16_t address);
 
+/*  GLOBALS  */
 volatile bool sw0_buttonEvent = false;
 volatile bool sw1_buttonEvent = false;
 volatile bool sw2_buttonEvent = false;
@@ -76,46 +79,40 @@ volatile bool d1State = false;
 volatile bool d2State = false;
 volatile bool d3State = false;
 
-const uint8_t d1_address = 0xD1;
-const uint8_t d2_address = 0xD2;
-const uint8_t d3_address = 0xD3;
+const uint8_t d1_address = I2C_MEMORY_SIZE - 1;
+const uint8_t d2_address = I2C_MEMORY_SIZE - 2;
+const uint8_t d3_address = I2C_MEMORY_SIZE - 3;
 
+/*   MAIN   */
 int main() {
 
     stdio_init_all();
-    printf("\nBoot\n");
+    printf("\n");
 
     ledsInit();
     pwmInit();
     buttonsInit();
     i2cInit();
 
-    uint8_t d1_data = i2c_read_byte(d1_address);
-    uint8_t d2_data = i2c_read_byte(d2_address);
-    uint8_t d3_data = i2c_read_byte(d3_address);
+    d1State = i2c_read_byte(d1_address);
+    d2State = i2c_read_byte(d2_address);
+    d3State = i2c_read_byte(d3_address);
 
-    if (d1_data != 0 && d1_data != 1 && d2_data != 0 && d2_data != 1 && d3_data != 0 && d3_data != 1) { // No valid state found
+    if (d1State != 0 && d1State != 1 && d2State != 0 && d2State!= 1 && d3State != 0 && d3State != 1) {
         ledsInitState();
     } else {
-        if (1 == d1_data) {
-            d1State = true;
+        if (true == d1State) {
             ledOn(D1);
-        } else {
-            ledOff(D1);
         }
-        if (1 == d2_data) {
-            d2State = true;
+        if (true == d2State) {
             ledOn(D2);
-        } else {
-            ledOff(D2);
         }
-        if (true == d3_data) {
-            d3State = true;
+        if (true == d3State) {
             ledOn(D3);
-        } else {
-            ledOff(D3);
         }
     }
+
+    printState();
 
     struct repeating_timer timer;
     add_repeating_timer_ms(BUTTON_PERIOD, repeatingTimerCallback, NULL, &timer);
@@ -131,8 +128,7 @@ int main() {
                 d3State = true;
             }
             i2c_write_byte(d3_address,d3State);
-            d3_data = i2c_read_byte(d3_address);
-            printf("Data at address 0xD3: %d\n", d3_data);
+            printState();
         }
 
         if (true == d3State) {
@@ -150,8 +146,7 @@ int main() {
                 d2State = true;
             }
             i2c_write_byte(d2_address,d2State);
-            d2_data = i2c_read_byte(d2_address);
-            printf("Data at address 0xD2: %d\n", d2_data);
+            printState();
         }
 
         if (true == d2State) {
@@ -169,8 +164,7 @@ int main() {
                 d1State = true;
             }
             i2c_write_byte(d1_address,d1State);
-            d1_data = i2c_read_byte(d1_address);
-            printf("Data at address 0xD1: %d\n", d1_data);
+            printState();
         }
 
         if (true == d1State) {
@@ -178,9 +172,6 @@ int main() {
         } else {
             ledOff(D1);
         }
-
-
-
 
     }
 
@@ -209,7 +200,6 @@ void buttonsInit() {
 }
 
 void pwmInit() {
-
     pwm_config config = pwm_get_default_config();
 
     // D1:             (2A)
@@ -248,7 +238,6 @@ void pwmInit() {
     pwm_set_gpio_level(D1, MIN_BRIGHTNESS);
     pwm_set_gpio_level(D2, MIN_BRIGHTNESS);
     pwm_set_gpio_level(D3, MIN_BRIGHTNESS);
-
 }
 
 void i2cInit() {
@@ -268,23 +257,36 @@ void ledOff(uint led_pin) {
 void ledsInitState() {
     pwm_set_gpio_level(D1, MIN_BRIGHTNESS);
     i2c_write_byte(d1_address,d1State);
-    uint8_t d1_data = i2c_read_byte(d1_address);
-    printf("Data at address 0xD1: %d\n", d1_data);
 
     pwm_set_gpio_level(D2, BRIGHTNESS);
     d2State = true;
     i2c_write_byte(d2_address,d2State);
-    uint8_t d2_data = i2c_read_byte(d2_address);
-    printf("Data at address 0xD2: %d\n", d2_data);
 
     pwm_set_gpio_level(D3, MIN_BRIGHTNESS);
     i2c_write_byte(d3_address,d3State);
-    uint8_t d3_data = i2c_read_byte(d3_address);
-    printf("Data at address 0xD3: %d\n", d3_data);
+}
+
+void printState() {
+    printf("%d s since power up.\n", time_us_32() / 1000000);
+    if (true == d1State) {
+        printf("D1: on\n");
+    } else {
+        printf("D1: off\n");
+    }
+    if (true == d2State) {
+        printf("D2: on\n");
+    } else {
+        printf("D2: off\n");
+    }
+    if (true == d3State) {
+        printf("D3: on\n\n");
+    } else {
+        printf("D3: off\n\n");
+    }
 }
 
 bool repeatingTimerCallback(struct repeating_timer *t) {
-
+    /* SW0 */
     static uint sw0_button_state = 0, sw0_filter_counter = 0;
     uint sw0_new_state = 1;
 
@@ -301,6 +303,7 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
         sw0_filter_counter = 0;
     }
 
+    /* SW1 */
     static uint sw1_button_state = 0, sw1_filter_counter = 0;
     uint sw1_new_state = 1;
 
@@ -317,6 +320,7 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
         sw1_filter_counter = 0;
     }
 
+    /* SW2 */
     static uint sw2_button_state = 0, sw2_filter_counter = 0;
     uint sw2_new_state = 1;
 
@@ -339,8 +343,8 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
 void i2c_write_byte(uint16_t address, uint8_t data) {
     uint8_t buffer[3];
     buffer[0] = address >> 8; buffer[1] = address; buffer[2] = data;
-    int retval = i2c_write_blocking(i2c0, DEVADDR, buffer, sizeof(buffer), false);
-    sleep_ms(500);
+    i2c_write_blocking(i2c0, DEVADDR, buffer, sizeof(buffer), false);
+    sleep_ms(10);
 }
 
 uint8_t i2c_read_byte(uint16_t address) {
