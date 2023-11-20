@@ -98,7 +98,7 @@ int main() {
     d2State = i2c_read_byte(d2_address);
     d3State = i2c_read_byte(d3_address);
 
-    if (d1State != 0 && d1State != 1 && d2State != 0 && d2State!= 1 && d3State != 0 && d3State != 1) {
+    if ((d1State != 0 && d1State != 1) || (d2State != 0 && d2State!= 1) || (d3State != 0 && d3State != 1)) {
         ledsInitState();
     } else {
         if (true == d1State) {
