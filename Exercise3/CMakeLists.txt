@@ -25,7 +25,7 @@ add_executable(${PROJECT_NAME}
     ring_buffer.h
     uart.c
     uart.h
-        ring_buffer.c)
+)
 
 # Create map/bin/hex/uf2 files
 pico_add_extra_outputs(${PROJECT_NAME})
