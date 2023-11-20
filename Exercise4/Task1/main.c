@@ -87,7 +87,7 @@ const uint8_t d3_address = I2C_MEMORY_SIZE - 3;
 int main() {
 
     stdio_init_all();
-    printf("\n");
+    printf("\nBoot\n");
 
     ledsInit();
     pwmInit();
@@ -172,7 +172,6 @@ int main() {
         } else {
             ledOff(D1);
         }
-
     }
 
     return 0;
@@ -267,7 +266,7 @@ void ledsInitState() {
 }
 
 void printState() {
-    printf("%d s since power up.\n", time_us_32() / 1000000);
+    printf("%llus since power up.\n", time_us_64() / 1000000);
     if (true == d1State) {
         printf("D1: on\n");
     } else {
