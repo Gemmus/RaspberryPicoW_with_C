@@ -34,9 +34,9 @@ The log must have the following properties:
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 
-                                        /////////////////////////////////////////////////////
-                                        //                      MACROS                     //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//                      MACROS                     //
+/////////////////////////////////////////////////////
 
 /*  LEDs  */
 #define D1 22
@@ -71,11 +71,11 @@ The log must have the following properties:
 #define DEBUG_LOG_SIZE 6
 
 /* USER INPUT */
-#define MAX_STR_INPUT_LENGTH 64
+#define MAX_STR_INPUT_LENGTH 8
 
-                                        /////////////////////////////////////////////////////
-                                        //             FUNCTION DECLARATIONS               //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//             FUNCTION DECLARATIONS               //
+/////////////////////////////////////////////////////
 
 void ledsInit();
 void buttonsInit();
@@ -95,9 +95,9 @@ void eraseLog();
 void printAllMemory();
 void eraseAll();
 
-                                        /////////////////////////////////////////////////////
-                                        //                GLOBAL VARIABLES                 //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//                GLOBAL VARIABLES                 //
+/////////////////////////////////////////////////////
 
 volatile bool sw0_buttonEvent = false;
 volatile bool sw1_buttonEvent = false;
@@ -113,9 +113,9 @@ const uint16_t d3_address = I2C_MEMORY_SIZE - 3;
 
 volatile uint log_counter = 0;
 
-                                        /////////////////////////////////////////////////////
-                                        //                     MAIN                        //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//                     MAIN                        //
+/////////////////////////////////////////////////////
 
 int main() {
 
@@ -133,20 +133,8 @@ int main() {
     d2State = i2cReadByte(d2_address);
     d3State = i2cReadByte(d3_address);
 
-    /* Printing in the beginning: */
-    /*
-    for (int i = 0; i < MAX_LOG_ENTRY; i++) {
-        for (int j = 0; j < DEBUG_LOG_SIZE; j++) {
-            uint8_t printed = i2cReadByte(i * MAX_LOG_SIZE + j);
-            printf("%c", printed);
-        }
-    }
-    printf("\n");
-§           */
-
     //eraseAll();
     //printAllMemory();
-
 
     if ((d1State != 0 && d1State != 1) || (d2State != 0 && d2State!= 1) || (d3State != 0 && d3State != 1)) {
         ledsInitState();
@@ -167,23 +155,42 @@ int main() {
     struct repeating_timer timer;
     add_repeating_timer_ms(BUTTON_PERIOD, repeatingTimerCallback, NULL, &timer);
 
+    char user_string1[MAX_STR_INPUT_LENGTH];
+    char user_string2[MAX_STR_INPUT_LENGTH];
+    char character;
+    int index = 0;
+
     while (true) {
 
         /* stdin inputs for "read" and "erase" */
-        /*char user_input[MAX_STR_INPUT_LENGTH];
-        if(NULL != fgets(user_input, MAX_STR_INPUT_LENGTH, stdin)) {
-            user_input[strcspn(user_input, "\n")] = 0;
-            int read_cmp = 0, erase_cmp = 0;
-            erase_cmp = strcmp("erase", user_input);
-            read_cmp = strcmp("read", user_input);
-            if (1 == read_cmp) {
-                printLog();
+        character = getchar_timeout_us(0);
+        while (character != 255 && index < 8) {
+            user_string1[index] = character;
+            user_string2[index] = character;
+
+            if(index == 4) {
+                user_string1[index] = '\0';
+                if (0 == strcmp("read", user_string1)) {
+                    printLog();
+                    index = 0;
+                    break;
+                }
             }
-            if (1 == erase_cmp) {
-                eraseLog();
+
+            if(index == 5)
+            {
+                user_string2[index] = '\0';
+                if (0 == strcmp("erase", user_string2)) {
+                    eraseLog();
+                    index = 0;
+                    break;
+                }
             }
+
+            index++;
+            character = getchar_timeout_us(0);
         }
-        */
+
         /* SW0 - D3 */
         if (sw0_buttonEvent) {
             sw0_buttonEvent = false;
@@ -242,9 +249,9 @@ int main() {
     return 0;
 }
 
-                                        /////////////////////////////////////////////////////
-                                        //                   FUNCTIONS                     //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//                   FUNCTIONS                     //
+/////////////////////////////////////////////////////
 
 void ledsInit() {
     gpio_init(D3);
@@ -336,12 +343,11 @@ void ledsInitState() {
 
 void printState() {
     printf("%llus since power up.\n", time_us_64() / 1000000);
-    printf("D1: %d\nD2: %d\nD3: %d\n\n", d1State, d1State, d3State);
+    printf("D1: %d\nD2: %d\nD3: %d\n\n", d1State, d2State, d3State);
 
     char log_message[MAX_LOG_SIZE - 3];
     snprintf(log_message, MAX_LOG_SIZE - 3, "%llus since power up.\nD1: %d\nD2: %d\nD3: %d\n", time_us_64() / 1000000, d1State, d2State, d3State);
     writeLogEntry(log_message);
-
 }
 
 bool repeatingTimerCallback(struct repeating_timer *t) {
@@ -479,8 +485,8 @@ void printLog() {
                 term_zero_index++;
             }
 
-            if(0 == crc16(buffer, (term_zero_index + 3))) {
-                printf("#%d\n", i + 1);
+            if(0 == crc16(buffer, (term_zero_index + 3)) && buffer[0] != 0 && (term_zero_index < (MAX_LOG_SIZE - 2))) {
+                printf("Log #%d\n", i + 1);
                 int index = 0;
                 while (buffer[index]) {
                     printf("%c", buffer[index++]);
