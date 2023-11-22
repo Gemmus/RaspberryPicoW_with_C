@@ -1,14 +1,14 @@
 /*
-Improve Exercise 1 by adding a persistent log that stores messages to EEPROM. When the program starts it writes “Boot” 
+Improve Exercise 1 by adding a persistent log that stores messages to EEPROM. When the program starts it writes “Boot”
 to the log and every time when state or LEDs is changed the state change message, as described in Exercise 1, is also written to the log.
- 
+
 The log must have the following properties:
     • Log starts from address 0 in the EEPROM.
     • First two kilobytes (2048 bytes) of EEPROM are used for the log.
     • Each log entry is reserved 64 bytes.
             o First entry is at address 0, second at address 64, third at address 128, etc.
             o Log can contain up to 32 entries.
-    • A log entry consists of a string that contains maximum 61 characters, a terminating null character (zero) 
+    • A log entry consists of a string that contains maximum 61 characters, a terminating null character (zero)
       and two-byte CRC that is used to validate the integrity of the data. A maximum length log entry uses all 64 bytes.
       A shorter entry will not use all reserved bytes. The string must contain at least one character.
     • When a log entry is written to the log, the string is written to the log including the terminating zero.
@@ -65,10 +65,13 @@ The log must have the following properties:
 #define I2C0_SCL_PIN 17
 #define DEVADDR 0x50
 #define BAUDRATE 100000
-#define I2C_MEMORY_SIZE (2^15)
+#define I2C_MEMORY_SIZE 32768
 #define MAX_LOG_SIZE 64
-#define MAX_LOG_ENTRY 4 //should be 32
+#define MAX_LOG_ENTRY 32
 #define DEBUG_LOG_SIZE 6
+
+/* USER INPUT */
+#define MAX_STR_INPUT_LENGTH 64
 
                                         /////////////////////////////////////////////////////
                                         //             FUNCTION DECLARATIONS               //
@@ -89,6 +92,8 @@ uint16_t crc16(const uint8_t *data_p, size_t length);
 void writeLogEntry(const char *message);
 void printLog();
 void eraseLog();
+void printAllMemory();
+void eraseAll();
 
                                         /////////////////////////////////////////////////////
                                         //                GLOBAL VARIABLES                 //
@@ -102,9 +107,9 @@ volatile bool d1State = false;
 volatile bool d2State = false;
 volatile bool d3State = false;
 
-const uint8_t d1_address = I2C_MEMORY_SIZE - 1;
-const uint8_t d2_address = I2C_MEMORY_SIZE - 2;
-const uint8_t d3_address = I2C_MEMORY_SIZE - 3;
+const uint16_t d1_address = I2C_MEMORY_SIZE - 1;
+const uint16_t d2_address = I2C_MEMORY_SIZE - 2;
+const uint16_t d3_address = I2C_MEMORY_SIZE - 3;
 
 volatile uint log_counter = 0;
 
@@ -122,13 +127,14 @@ int main() {
     i2cInit();
 
     printf("\nBoot\n");
-    writeLogEntry("\nBoot\n");
+    writeLogEntry("Boot\n");
 
     d1State = i2cReadByte(d1_address);
     d2State = i2cReadByte(d2_address);
     d3State = i2cReadByte(d3_address);
 
     /* Printing in the beginning: */
+    /*
     for (int i = 0; i < MAX_LOG_ENTRY; i++) {
         for (int j = 0; j < DEBUG_LOG_SIZE; j++) {
             uint8_t printed = i2cReadByte(i * MAX_LOG_SIZE + j);
@@ -136,6 +142,11 @@ int main() {
         }
     }
     printf("\n");
+§           */
+
+    //eraseAll();
+    //printAllMemory();
+
 
     if ((d1State != 0 && d1State != 1) || (d2State != 0 && d2State!= 1) || (d3State != 0 && d3State != 1)) {
         ledsInitState();
@@ -158,6 +169,21 @@ int main() {
 
     while (true) {
 
+        /* stdin inputs for "read" and "erase" */
+        /*char user_input[MAX_STR_INPUT_LENGTH];
+        if(NULL != fgets(user_input, MAX_STR_INPUT_LENGTH, stdin)) {
+            user_input[strcspn(user_input, "\n")] = 0;
+            int read_cmp = 0, erase_cmp = 0;
+            erase_cmp = strcmp("erase", user_input);
+            read_cmp = strcmp("read", user_input);
+            if (1 == read_cmp) {
+                printLog();
+            }
+            if (1 == erase_cmp) {
+                eraseLog();
+            }
+        }
+        */
         /* SW0 - D3 */
         if (sw0_buttonEvent) {
             sw0_buttonEvent = false;
@@ -310,26 +336,15 @@ void ledsInitState() {
 
 void printState() {
     printf("%llus since power up.\n", time_us_64() / 1000000);
-    if (true == d1State) {
-        printf("D1: on\n");
-    } else {
-        printf("D1: off\n");
-    }
-    if (true == d2State) {
-        printf("D2: on\n");
-    } else {
-        printf("D2: off\n");
-    }
-    if (true == d3State) {
-        printf("D3: on\n\n");
-    } else {
-        printf("D3: off\n\n");
-    }
+    printf("D1: %d\nD2: %d\nD3: %d\n\n", d1State, d1State, d3State);
+
+    char log_message[MAX_LOG_SIZE - 3];
+    snprintf(log_message, MAX_LOG_SIZE - 3, "%llus since power up.\nD1: %d\nD2: %d\nD3: %d\n", time_us_64() / 1000000, d1State, d2State, d3State);
+    writeLogEntry(log_message);
+
 }
 
 bool repeatingTimerCallback(struct repeating_timer *t) {
-    /* stdin inputs */
-
     /* SW0 */
     static uint sw0_button_state = 0, sw0_filter_counter = 0;
     uint sw0_new_state = 1;
@@ -387,6 +402,7 @@ bool repeatingTimerCallback(struct repeating_timer *t) {
 void i2cWriteByte(uint16_t address, uint8_t data) {
     uint8_t buffer[3];
     buffer[0] = address >> 8; buffer[1] = address; buffer[2] = data;
+    //printf("wr %x: %x\n", address, data);
     i2c_write_blocking(i2c0, DEVADDR, buffer, sizeof(buffer), false);
     sleep_ms(10);
 }
@@ -406,15 +422,15 @@ uint16_t crc16(const uint8_t *data_p, size_t length) {
     while (length--) {
         x = crc >> 8 ^ *data_p++;
         x ^= x >> 4;
-        crc = (crc << 8) ^((uint16_t) (x << 12)) ^ ((uint16_t) (x << 5)) ^ ((uint16_t) (x));
+        crc = (crc << 8) ^ ((uint16_t) (x << 12)) ^ ((uint16_t) (x << 5)) ^ ((uint16_t) (x));
     }
     return crc;
 }
 
 void writeLogEntry(const char *message) {
     if (log_counter >= MAX_LOG_ENTRY) {
+        printf("Maximum allowed log number reached. ");
         eraseLog();
-        log_counter = 0;
     }
 
     size_t message_length = strlen(message);
@@ -427,7 +443,7 @@ void writeLogEntry(const char *message) {
         memcpy(buffer, message, message_length);
         buffer[message_length] = '\0';
 
-        uint16_t crc = crc16(buffer, message_length);
+        uint16_t crc = crc16(buffer, message_length + 1);
         buffer[message_length + 1] = (uint8_t) (crc >> 8);
         buffer[message_length + 2] = (uint8_t) crc;
 
@@ -435,6 +451,7 @@ void writeLogEntry(const char *message) {
         for(int i = 0; i < (message_length + 3); i++) {
             i2cWriteByte(log_address++, buffer[i]);
         }
+        //printLog();
     } else {
         printf("Invalid input. Log message must contain at least one character.\n");
     }
@@ -443,15 +460,39 @@ void writeLogEntry(const char *message) {
 void printLog() {
     if (0 != log_counter) {
         uint16_t log_address = 0;
-        printf("Printing log messages from memory:\n");
-        for(int i = 0; i <= log_counter; i++) {
-            // we retrieve the message
+        uint8_t buffer[MAX_LOG_SIZE];
 
-            // we validate the message here
-            // if valid print else print log[i + 1] invalid
+        printf("Printing log messages from memory:\n");
+        for (int i = 0; i < log_counter; i++) {
+            log_address = i * MAX_LOG_SIZE;
+            for (int j = 0; j < MAX_LOG_SIZE; j++) {
+                buffer[j] = i2cReadByte(log_address++);
+            }
+            /*
+            for(int k = 0; k < MAX_LOG_SIZE/2; k += 4)
+            {
+                printf("%x %x %x %x\n", buffer[k+0], buffer[k+1], buffer[k+2], buffer[k+3]);
+            }
+            */
+            int term_zero_index = 0;
+            while (buffer[term_zero_index] != '\0') {
+                term_zero_index++;
+            }
+
+            if(0 == crc16(buffer, (term_zero_index + 3))) {
+                printf("#%d\n", i + 1);
+                int index = 0;
+                while (buffer[index]) {
+                    printf("%c", buffer[index++]);
+                }
+                printf("\n");
+            } else {
+                printf("Log message #%d invalid. Exit printing.\n", i + 1);
+                break;
+            }
         }
     } else {
-        printf("No log message in memory.");
+        printf("No log message in memory yet.\n");
     }
 }
 
@@ -462,5 +503,29 @@ void eraseLog() {
         i2cWriteByte(log_address, 0);
         log_address += MAX_LOG_SIZE;
     }
+    log_counter = 0;
     printf(" done.\n");
+}
+
+void eraseAll(){
+    printf("Erasing all from memory... ");
+    uint16_t log_address = 0;
+    for(int i = 0; i < MAX_LOG_SIZE * MAX_LOG_ENTRY; i++) {
+        i2cWriteByte(log_address, 0xFF);
+        log_address++;
+    }
+    log_counter = 0;
+    printf(" done.\n");
+}
+
+void printAllMemory() {
+    printf("\n");
+    for (int i = 0; i < MAX_LOG_ENTRY; i++) {
+        for (int j = 0; j < MAX_LOG_SIZE; j++) {
+            uint8_t printed = i2cReadByte(i * MAX_LOG_SIZE + j);
+            printf("%x ", printed);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
