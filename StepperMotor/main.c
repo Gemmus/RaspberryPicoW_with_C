@@ -34,9 +34,9 @@ The log must have the following properties:
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 
-                                        /////////////////////////////////////////////////////
-                                        //                      MACROS                     //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//                      MACROS                     //
+/////////////////////////////////////////////////////
 
 /*  LEDs  */
 #define D1 22
@@ -73,9 +73,9 @@ The log must have the following properties:
 /* USER INPUT */
 #define MAX_STR_INPUT_LENGTH 8
 
-                                        /////////////////////////////////////////////////////
-                                        //             FUNCTION DECLARATIONS               //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//             FUNCTION DECLARATIONS               //
+/////////////////////////////////////////////////////
 
 void ledsInit();
 void buttonsInit();
@@ -95,9 +95,9 @@ void eraseLog();
 void printAllMemory();
 void eraseAll();
 
-                                        /////////////////////////////////////////////////////
-                                        //                GLOBAL VARIABLES                 //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//                GLOBAL VARIABLES                 //
+/////////////////////////////////////////////////////
 
 volatile bool sw0_buttonEvent = false;
 volatile bool sw1_buttonEvent = false;
@@ -113,9 +113,9 @@ const uint16_t d3_address = I2C_MEMORY_SIZE - 3;
 
 volatile uint log_counter = 0;
 
-                                        /////////////////////////////////////////////////////
-                                        //                     MAIN                        //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//                     MAIN                        //
+/////////////////////////////////////////////////////
 
 int main() {
 
@@ -249,9 +249,9 @@ int main() {
     return 0;
 }
 
-                                        /////////////////////////////////////////////////////
-                                        //                   FUNCTIONS                     //
-                                        /////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+//                   FUNCTIONS                     //
+/////////////////////////////////////////////////////
 
 void ledsInit() {
     gpio_init(D3);
@@ -485,7 +485,7 @@ void printLog() {
                 term_zero_index++;
             }
 
-            if(0 == crc16(buffer, (term_zero_index + 3))) {
+            if(0 == crc16(buffer, (term_zero_index + 3)) && buffer[0] != 0 && (term_zero_index < (MAX_LOG_SIZE - 2))) {
                 printf("Log #%d\n", i + 1);
                 int index = 0;
                 while (buffer[index]) {
