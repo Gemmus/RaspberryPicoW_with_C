@@ -126,7 +126,7 @@ int main() {
     buttonsInit();
     i2cInit();
 
-    printf("\nBoot\n");
+    printf("\nBoot\n\n");
     writeLogEntry("Boot\n");
 
     d1State = i2cReadByte(d1_address);
@@ -498,7 +498,7 @@ void printLog() {
             }
         }
     } else {
-        printf("No log message in memory yet.\n");
+        printf("No log message in memory yet.\n\n");
     }
 }
 
@@ -510,7 +510,7 @@ void eraseLog() {
         log_address += MAX_LOG_SIZE;
     }
     log_counter = 0;
-    printf(" done.\n");
+    printf(" done.\n\n");
 }
 
 void eraseAll(){
