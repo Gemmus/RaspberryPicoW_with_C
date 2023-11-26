@@ -1,21 +1,22 @@
 /*
-In this exercise you need to calibrate the stepper motor position and count the number of steps per revolution by using 
-an optical sensor. The reducer gearing ratio is not exactly 1:64 so the number of steps per revolution is not exactly 
+In this exercise you need to calibrate the stepper motor position and count the number of steps per revolution by using
+an optical sensor. The reducer gearing ratio is not exactly 1:64 so the number of steps per revolution is not exactly
 4096 steps with half-stepping. By calibrating motor position and the number of steps per revolution we can get better accuracy.
-  
+
 Implement a program that reads commands from standard input. The commands to implement are:
     • status – prints the state of the system:
             o Is it calibrated?
             o Number of steps per revolution or “not available” if not calibrated
     • calib – perform calibration
-            o Calibration should run the motor in one direction until a falling edge is seen in the opto fork input and 
-              then count number of steps to the next falling edge. To get more accurate results count the number of steps 
+            o Calibration should run the motor in one direction until a falling edge is seen in the opto fork input and
+              then count number of steps to the next falling edge. To get more accurate results count the number of steps
               per revolution three times and take the average of the values.
-    • run N – N is an integer that may be omitted. Runs the motor N times 1/8th of a revolution. If N is omitted run one 
+    • run N – N is an integer that may be omitted. Runs the motor N times 1/8th of a revolution. If N is omitted run one
       full revolution. “Run 8” should also run one full revolution.
 */
 
 #include <stdio.h>
+#include <string.h>
 #include "pico/stdlib.h"
 #include "pico/time.h"
 #include "hardware/irq.h"
@@ -55,6 +56,8 @@ Implement a program that reads commands from standard input. The commands to imp
 #define IN4 2
 #define OPTOFORK 28
 #define PIEZO 27
+#define STEPS_PER_REVOLUTION 4096
+#define CALIBRATION_RUNS 3
 
 /*     LoRaWAN     */
 #define UART_NR 1
@@ -75,21 +78,26 @@ Implement a program that reads commands from standard input. The commands to imp
 /////////////////////////////////////////////////////
 //             FUNCTION DECLARATIONS               //
 /////////////////////////////////////////////////////
-void ledInit();
-void buttonInit();
-void pwmInit();
-void ledOn(uint led_pin);
-void ledOff(uint led_pin);
 void stepperMotorInit();
 void optoforkInit();
 void piezoInit();
-bool repeatingTimerCallback(struct repeating_timer *t);
+void runMotor(const uint times);
+void optoFallingEdge();
 
 /////////////////////////////////////////////////////
 //                GLOBAL VARIABLES                 //
 /////////////////////////////////////////////////////
-volatile bool sw1_buttonEvent = false;
-volatile bool d2State = false;
+const uint turning_sequence[8][4] = {{1, 0, 0, 0},
+                                     {1, 1, 0, 0},
+                                     {0, 1, 0, 0},
+                                     {0, 1, 1, 0},
+                                     {0, 0, 1, 0},
+                                     {0, 0, 1, 1},
+                                     {0, 0, 0, 1},
+                                     {1, 0, 0, 1}};
+volatile bool fallingEdge = false;
+volatile bool calibrated = false;
+volatile uint revolution_counter = 0;
 
 /////////////////////////////////////////////////////
 //                     MAIN                        //
@@ -98,50 +106,41 @@ int main() {
 
     stdio_init_all();
 
-    ledInit();
-    pwmInit();
-    buttonInit();
     stepperMotorInit();
     optoforkInit();
     piezoInit();
 
-    struct repeating_timer timer;
-    add_repeating_timer_ms(BUTTON_PERIOD, repeatingTimerCallback, NULL, &timer);
-
-    const uint turning_sequence[8][4] = {{1, 0, 0, 0},
-                                         {1, 1, 0, 0},
-                                         {0, 1, 0, 0},
-                                         {0, 1, 1, 0},
-                                         {0, 0, 1, 0},
-                                         {0, 0, 1, 1},
-                                         {0, 0, 0, 1},
-                                         {1, 0, 0, 1}};
+    gpio_set_irq_enabled_with_callback(OPTOFORK, GPIO_IRQ_EDGE_FALL, true, optoFallingEdge);
 
     while (true) {
 
-        /* SW1 - D2 */
-        if (sw1_buttonEvent) {
-            sw1_buttonEvent = false;
-            if(true == d2State) {
-                d2State = false;
-            } else {
-                d2State = true;
+        char command[10];
+        int retval = scanf("%s", command);
+        if (1 == retval) {
+            if (strcmp(command, "status") == 0) {
+                if(true == calibrated) {
+                    printf("The number of steps per revolution: %d\n", revolution_counter);
+                } else {
+                    printf("Not available.\n");
+                }
+            } else if (strcmp(command, "calib") == 0){
+                calibrated = false;
+                while (false == calibrated) {
+                        runMotor(1);
+                        revolution_counter = 0;
+                }
+            } else if (strcmp(command, "run") == 0) {
+                int N_times = STEPS_PER_REVOLUTION / 8;
+                if (1 == scanf("%d", &N_times)) {
+                    if (N_times > 0) {
+                        printf("%d", N_times);
+                        runMotor( N_times * STEPS_PER_REVOLUTION / 64 );
+                    }
+                }
+                runMotor(N_times);
+                fflush(stdin);
             }
         }
-
-        if (true == d2State) {
-            ledOn(D2);
-            for (int i = 7; i >= 0; i--) {
-                gpio_put(IN1, turning_sequence[i][0]);
-                gpio_put(IN2, turning_sequence[i][1]);
-                gpio_put(IN3, turning_sequence[i][2]);
-                gpio_put(IN4, turning_sequence[i][3]);
-                sleep_ms(10);
-            }
-        } else {
-            ledOff(D2);
-        }
-
     }
 
     return 0;
@@ -150,43 +149,6 @@ int main() {
 /////////////////////////////////////////////////////
 //                   FUNCTIONS                     //
 /////////////////////////////////////////////////////
-
-void ledInit() {
-    gpio_init(D2);
-    gpio_set_dir(D2, GPIO_OUT);
-}
-
-void buttonInit() {
-    gpio_init(SW_1);
-    gpio_set_dir(SW_1, GPIO_IN);
-    gpio_pull_up(SW_1);
-}
-
-void pwmInit() {
-    pwm_config config = pwm_get_default_config();
-
-    // D2:             (2B)
-    uint d2_slice = pwm_gpio_to_slice_num(D2);
-    uint d2_chanel = pwm_gpio_to_channel(D2);
-    pwm_set_enabled(d2_slice, false);
-    pwm_config_set_clkdiv_int(&config, DIVIDER);
-    pwm_config_set_wrap(&config, PWM_FREQ - 1);
-    pwm_init(d2_slice, &config, false);
-    pwm_set_chan_level(d2_slice, d2_chanel, LEVEL + 1);
-    gpio_set_function(D2, GPIO_FUNC_PWM);
-    pwm_set_enabled(d2_slice, true);
-
-    pwm_set_gpio_level(D2, MIN_BRIGHTNESS);
-}
-
-void ledOn(uint led_pin) {
-    pwm_set_gpio_level(led_pin, BRIGHTNESS);
-}
-
-void ledOff(uint led_pin) {
-    pwm_set_gpio_level(led_pin, MIN_BRIGHTNESS);
-}
-
 void stepperMotorInit() {
     gpio_init(IN1);
     gpio_set_dir(IN1, GPIO_OUT);
@@ -210,24 +172,24 @@ void piezoInit() {
     gpio_pull_up(PIEZO);
 }
 
-bool repeatingTimerCallback(struct repeating_timer *t) {
+void runMotor(const uint times) {
+    for (int i = 0; i <= times; i++) {
+        for (int j = 7; j >= 0; j--) {
+            gpio_put(IN1, turning_sequence[j][0]);
+            gpio_put(IN2, turning_sequence[j][1]);
+            gpio_put(IN3, turning_sequence[j][2]);
+            gpio_put(IN4, turning_sequence[j][3]);
+            if (false == fallingEdge) {
+                revolution_counter++;
 
-    /* SW1 */
-    static uint sw1_button_state = 0, sw1_filter_counter = 0;
-    uint sw1_new_state = 1;
-
-    sw1_new_state = gpio_get(SW_1);
-    if (sw1_button_state != sw1_new_state) {
-        if (++sw1_filter_counter >= BUTTON_FILTER) {
-            sw1_button_state = sw1_new_state;
-            sw1_filter_counter = 0;
-            if (sw1_new_state != SW1_RELEASED) {
-                sw1_buttonEvent = true;
             }
+            printf("Rev number = %d\n", revolution_counter);
+            sleep_ms(15);
         }
-    } else {
-        sw1_filter_counter = 0;
     }
+}
 
-    return true;
+void optoFallingEdge() {
+    fallingEdge = false;
+    calibrated = true;
 }
