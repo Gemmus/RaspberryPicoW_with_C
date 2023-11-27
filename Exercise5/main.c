@@ -44,18 +44,18 @@ void runMotor(const uint times);
 /////////////////////////////////////////////////////
 //                GLOBAL VARIABLES                 //
 /////////////////////////////////////////////////////
-const uint turning_sequence[8][4] = {{1, 0, 0, 0},
-                                     {1, 1, 0, 0},
-                                     {0, 1, 0, 0},
-                                     {0, 1, 1, 0},
-                                     {0, 0, 1, 0},
-                                     {0, 0, 1, 1},
-                                     {0, 0, 0, 1},
-                                     {1, 0, 0, 1}};
-volatile bool fallingEdge = false;
-volatile bool calibrated = false;
-volatile uint revolution_counter = 0;
-uint calibration_count = 0;
+static const uint turning_sequence[8][4] = {{1, 0, 0, 0},
+                                            {1, 1, 0, 0},
+                                            {0, 1, 0, 0},
+                                            {0, 1, 1, 0},
+                                            {0, 0, 1, 0},
+                                            {0, 0, 1, 1},
+                                            {0, 0, 0, 1},
+                                            {1, 0, 0, 1}};
+static volatile bool fallingEdge = false;
+static volatile bool calibrated = false;
+static volatile uint revolution_counter = 0;
+static uint calibration_count = 0;
 
 /////////////////////////////////////////////////////
 //                     MAIN                        //
@@ -88,10 +88,14 @@ int main() {
                     if (strlen(command) >= 5) {
                         sscanf(&command[strlen("run")], "%u", &N_times);
                     }
-                    runMotor(N_times * STEPS_PER_REVOLUTION / 64);
+                    if (true == calibrated) {
+                        runMotor(N_times * calibration_count / 64);
+                    } else {
+                        runMotor(N_times * STEPS_PER_REVOLUTION / 64);
+                    }
                 } else if (0 == strcmp("status", command)) {
                     if (true == calibrated) {
-                        printf("The number of steps per revolution: %d\n", calibration_count);
+                        printf("Position: %u\n", revolution_counter);
                     } else {
                         printf("Not available.\n");
                     }
@@ -101,13 +105,12 @@ int main() {
                     while (false == fallingEdge) {
                         runMotor(1);
                     }
-                    revolution_counter = 0;
                     fallingEdge = false;
                     while (false == fallingEdge) {
                         runMotor(1);
                     }
                     calibrated = true;
-                    calibration_count = revolution_counter;
+                    printf("Number of steps per revolution: %u\n", calibration_count);
                 }
 
                 memset(command, 0, sizeof(command));
@@ -142,6 +145,10 @@ void optoforkInit() {
 
 void optoFallingEdge() {
     fallingEdge = true;
+    if (false == calibrated) {
+        calibration_count = revolution_counter;
+    }
+    revolution_counter = 0;
 }
 
 void runMotor(const uint times) {
@@ -151,10 +158,8 @@ void runMotor(const uint times) {
             gpio_put(IN2, turning_sequence[j][1]);
             gpio_put(IN3, turning_sequence[j][2]);
             gpio_put(IN4, turning_sequence[j][3]);
-            if (false == fallingEdge) {
-                revolution_counter++;
-            }
-            sleep_ms(10);
+            revolution_counter++;
+            sleep_ms(5);
         }
     }
 }
