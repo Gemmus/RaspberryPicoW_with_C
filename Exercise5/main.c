@@ -56,6 +56,7 @@ static volatile bool fallingEdge = false;
 static volatile bool calibrated = false;
 static volatile uint revolution_counter = 0;
 static uint calibration_count = 0;
+static volatile uint row = 0;
 
 /////////////////////////////////////////////////////
 //                     MAIN                        //
@@ -89,13 +90,13 @@ int main() {
                         sscanf(&command[strlen("run")], "%u", &N_times);
                     }
                     if (true == calibrated) {
-                        runMotor(N_times * calibration_count / 64);
+                        runMotor(N_times * calibration_count / 8);
                     } else {
-                        runMotor(N_times * STEPS_PER_REVOLUTION / 64);
+                        runMotor(N_times * STEPS_PER_REVOLUTION / 8);
                     }
                 } else if (0 == strcmp("status", command)) {
                     if (true == calibrated) {
-                        printf("Position: %u\n", revolution_counter);
+                        printf("Position: %u / %u \n", revolution_counter, calibration_count);
                     } else {
                         printf("Not available.\n");
                     }
@@ -152,14 +153,15 @@ void optoFallingEdge() {
 }
 
 void runMotor(const uint times) {
-    for (int i = 0; i <= times; i++) {
-        for (int j = 7; j >= 0; j--) {
-            gpio_put(IN1, turning_sequence[j][0]);
-            gpio_put(IN2, turning_sequence[j][1]);
-            gpio_put(IN3, turning_sequence[j][2]);
-            gpio_put(IN4, turning_sequence[j][3]);
-            revolution_counter++;
-            sleep_ms(5);
+    for(int i  = 0; i < times; i++) {
+        gpio_put(IN1, turning_sequence[row][0]);
+        gpio_put(IN2, turning_sequence[row][1]);
+        gpio_put(IN3, turning_sequence[row][2]);
+        gpio_put(IN4, turning_sequence[row++][3]);
+        revolution_counter++;
+        if (row == 8) {
+            row = 0;
         }
+        sleep_ms(4);
     }
 }
