@@ -21,7 +21,6 @@ Implement a program that reads commands from standard input. The commands to imp
 #include "pico/time.h"
 #include "hardware/irq.h"
 #include "hardware/gpio.h"
-#include "hardware/pwm.h"
 
 /////////////////////////////////////////////////////
 //                      MACROS                     //
@@ -70,54 +69,54 @@ int main() {
 
     gpio_set_irq_enabled_with_callback(OPTOFORK, GPIO_IRQ_EDGE_FALL, true, optoFallingEdge);
 
+    char command[8];
+    memset(command, 0, sizeof(command));
+    char character;
+    int index = 0;
+
     while (true) {
 
-        char command[6];
-        int retval = scanf("%s", command);
-        if (1 == retval) {
-            if (strcmp(command, "status") == 0) {
-                if (true == calibrated) {
-                    printf("The number of steps per revolution: %d\n", calibration_count);
-                } else {
-                    printf("Not available.\n");
-                }
-            } else if (strcmp(command, "calib") == 0) {
-                calibrated = false;
-                fallingEdge = false;
-                while (false == fallingEdge) {
-                    runMotor(1);
-                }
-                revolution_counter = 0;
-                fallingEdge = false;
-                while (false == fallingEdge) {
-                    runMotor(1);
-                }
-                calibrated = true;
-                calibration_count = revolution_counter;
-            } else if (strcmp(command, "run") == 0) {
-                int N_times = STEPS_PER_REVOLUTION / 8;
-                uint num = STEPS_PER_REVOLUTION / 8;
-                num = getchar_timeout_us(10);
-                if (num >= 0) {
-                    printf("Not timed out %d", num);
-                }
-                else {
-                    printf("Timed out %d", num);
-                }
-#if 0
+        character = getchar_timeout_us(0);
+        while (character != 255) {
+            command[index++] = character;
 
-                if (1 == scanf("%d", &N_times)) {
-                    if (N_times > 0) {
-                        printf("%d", N_times);
-                        runMotor( N_times * STEPS_PER_REVOLUTION / 64 );
+            if (index == 7 || character == '\n') {
+                command[index - 1] = '\0';
+
+                if (0 == strncmp("run", command, strlen("run"))) {
+                    uint N_times = 8;
+                    if (strlen(command) >= 5) {
+                        sscanf(&command[strlen("run")], "%u", &N_times);
                     }
+                    runMotor(N_times * STEPS_PER_REVOLUTION / 64);
+                } else if (0 == strcmp("status", command)) {
+                    if (true == calibrated) {
+                        printf("The number of steps per revolution: %d\n", calibration_count);
+                    } else {
+                        printf("Not available.\n");
+                    }
+                } else if (0 == strcmp("calib", command)) {
+                    calibrated = false;
+                    fallingEdge = false;
+                    while (false == fallingEdge) {
+                        runMotor(1);
+                    }
+                    revolution_counter = 0;
+                    fallingEdge = false;
+                    while (false == fallingEdge) {
+                        runMotor(1);
+                    }
+                    calibrated = true;
+                    calibration_count = revolution_counter;
                 }
-#endif
-                //runMotor(N_times);
+
+                memset(command, 0, sizeof(command));
+                index = 0;
+                break;
             }
+            character = getchar_timeout_us(0);
         }
     }
-
     return 0;
 }
 
@@ -154,10 +153,8 @@ void runMotor(const uint times) {
             gpio_put(IN4, turning_sequence[j][3]);
             if (false == fallingEdge) {
                 revolution_counter++;
-
             }
-            printf("Rev number = %d\n", revolution_counter);
-            sleep_ms(5);
+            sleep_ms(10);
         }
     }
 }
