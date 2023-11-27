@@ -26,63 +26,21 @@ Implement a program that reads commands from standard input. The commands to imp
 /////////////////////////////////////////////////////
 //                      MACROS                     //
 /////////////////////////////////////////////////////
-
-/*    LEDs    */
-#define D1 22
-#define D2 21
-#define D3 20
-
-/*   BUTTONS   */
-#define SW_0 9
-#define SW_1 8
-#define SW_2 7
-#define BUTTON_PERIOD 10
-#define BUTTON_FILTER 5
-#define SW0_RELEASED 1
-#define SW1_RELEASED 1
-#define SW2_RELEASED 1
-
-/*     PWM      */
-#define PWM_FREQ 1000
-#define LEVEL 5
-#define DIVIDER 125
-#define BRIGHTNESS 200
-#define MIN_BRIGHTNESS 0
-
 /*  STEP MOTOR  */
 #define IN1 13
 #define IN2 6
 #define IN3 3
 #define IN4 2
 #define OPTOFORK 28
-#define PIEZO 27
 #define STEPS_PER_REVOLUTION 4096
-#define CALIBRATION_RUNS 3
-
-/*     LoRaWAN     */
-#define UART_NR 1
-#define UART_TX_PIN 4
-#define UART_RX_PIN 5
-#define BAUD_RATE 9600
-
-/*   I2C   */
-#define I2C0_SDA_PIN 16
-#define I2C0_SCL_PIN 17
-#define DEVADDR 0x50
-#define BAUDRATE 100000
-#define I2C_MEMORY_SIZE 32768
-#define MAX_LOG_SIZE 64
-#define MAX_LOG_ENTRY 32
-#define DEBUG_LOG_SIZE 6
 
 /////////////////////////////////////////////////////
 //             FUNCTION DECLARATIONS               //
 /////////////////////////////////////////////////////
 void stepperMotorInit();
 void optoforkInit();
-void piezoInit();
-void runMotor(const uint times);
 void optoFallingEdge();
+void runMotor(const uint times);
 
 /////////////////////////////////////////////////////
 //                GLOBAL VARIABLES                 //
@@ -98,6 +56,7 @@ const uint turning_sequence[8][4] = {{1, 0, 0, 0},
 volatile bool fallingEdge = false;
 volatile bool calibrated = false;
 volatile uint revolution_counter = 0;
+uint calibration_count = 0;
 
 /////////////////////////////////////////////////////
 //                     MAIN                        //
@@ -108,37 +67,53 @@ int main() {
 
     stepperMotorInit();
     optoforkInit();
-    piezoInit();
 
     gpio_set_irq_enabled_with_callback(OPTOFORK, GPIO_IRQ_EDGE_FALL, true, optoFallingEdge);
 
     while (true) {
 
-        char command[10];
+        char command[6];
         int retval = scanf("%s", command);
         if (1 == retval) {
             if (strcmp(command, "status") == 0) {
-                if(true == calibrated) {
-                    printf("The number of steps per revolution: %d\n", revolution_counter);
+                if (true == calibrated) {
+                    printf("The number of steps per revolution: %d\n", calibration_count);
                 } else {
                     printf("Not available.\n");
                 }
-            } else if (strcmp(command, "calib") == 0){
+            } else if (strcmp(command, "calib") == 0) {
                 calibrated = false;
-                while (false == calibrated) {
-                        runMotor(1);
-                        revolution_counter = 0;
+                fallingEdge = false;
+                while (false == fallingEdge) {
+                    runMotor(1);
                 }
+                revolution_counter = 0;
+                fallingEdge = false;
+                while (false == fallingEdge) {
+                    runMotor(1);
+                }
+                calibrated = true;
+                calibration_count = revolution_counter;
             } else if (strcmp(command, "run") == 0) {
                 int N_times = STEPS_PER_REVOLUTION / 8;
+                uint num = STEPS_PER_REVOLUTION / 8;
+                num = getchar_timeout_us(10);
+                if (num >= 0) {
+                    printf("Not timed out %d", num);
+                }
+                else {
+                    printf("Timed out %d", num);
+                }
+#if 0
+
                 if (1 == scanf("%d", &N_times)) {
                     if (N_times > 0) {
                         printf("%d", N_times);
                         runMotor( N_times * STEPS_PER_REVOLUTION / 64 );
                     }
                 }
-                runMotor(N_times);
-                fflush(stdin);
+#endif
+                //runMotor(N_times);
             }
         }
     }
@@ -166,10 +141,8 @@ void optoforkInit() {
     gpio_pull_up(OPTOFORK);
 }
 
-void piezoInit() {
-    gpio_init(PIEZO);
-    gpio_set_dir(PIEZO, GPIO_IN);
-    gpio_pull_up(PIEZO);
+void optoFallingEdge() {
+    fallingEdge = true;
 }
 
 void runMotor(const uint times) {
@@ -184,12 +157,7 @@ void runMotor(const uint times) {
 
             }
             printf("Rev number = %d\n", revolution_counter);
-            sleep_ms(15);
+            sleep_ms(5);
         }
     }
-}
-
-void optoFallingEdge() {
-    fallingEdge = false;
-    calibrated = true;
 }
