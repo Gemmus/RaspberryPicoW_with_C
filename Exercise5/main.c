@@ -159,7 +159,7 @@ void runMotor(const uint times) {
         gpio_put(IN3, turning_sequence[row][2]);
         gpio_put(IN4, turning_sequence[row++][3]);
         revolution_counter++;
-        if (row == 8) {
+        if (row >= 8) {
             row = 0;
         }
         sleep_ms(4);
